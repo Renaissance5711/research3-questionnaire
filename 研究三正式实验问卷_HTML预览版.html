@@ -274,7 +274,7 @@
       const showConfig=document.getElementById('showConfig').value==='yes';
       const header=`<div class="ai-title"><span class="material-id">AI 分析材料 · 只读</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>`;
       const update=`<span class="ai-inline-update">新增信息：${c.update}</span>`;
-      const livedContext=`<div class="ai-human-note"><strong>放回经营现场：</strong>${detail(c,'human')} 这段判断的作用，是提醒团队把 AI 给出的方向放回客户、预算、交付和责任边界中核对，而不是只根据一个漂亮的指标决定是否投入。</div>`;
+      const livedContext=`<div class="ai-human-note"><strong>放回经营现场：</strong>${detail(c,'human')} <strong>还要同时核对：</strong>${detail(c,'stakeholders')} ${detail(c,'constraints')} <strong>这意味着：</strong>AI 给出的方向只能作为下一轮讨论的起点，团队仍需把客户是否愿意承担、资源是否按期到位以及谁来负责验收说清楚，再决定继续、调整还是暂停投入。</div>`;
       let body='';
       if(arch==='G1'){
         if(c.kind==='E') body=`<p>综合来看，${c.facts[0]}${c.facts[1]}${c.facts[2]}这些信息说明机会值得继续验证，但还不能把当前反馈视为稳定需求。${update}建议${preferredText(c)}，先保持小范围观察，再根据${c.evidence[1]||c.evidence[0]}是否持续变化决定是否扩大投入。</p><div class="ai-conclusion">当前判断：先保留验证空间，把需求信号与实施约束放在同一轮观察中。</div>`;
