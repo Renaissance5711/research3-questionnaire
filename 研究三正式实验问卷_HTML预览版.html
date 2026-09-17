@@ -146,15 +146,15 @@
       {id:'bi9',text:'团队在关键决策后会复盘各自判断与信息来源。',type:'agree'}
     ];
     const cases = {
-      E1:{id:'E1',kind:'E',domain:'某网络设备企业',title:'AI 运维需求变化',horizon:'未来12个月',context:'某网络设备企业是一家面向制造业客户提供网络设备与运维服务的企业。公司计划把 AI 运维能力嵌入现有服务，以提高故障预测和远程诊断的效率。',goal:'未来 12 个月判断 AI 运维需求是否会形成可持续的付费市场，并确定下一步观察重点。',facts:['【客户试点记录】两家重点客户愿意安排小范围试点，但尚未承诺续约价格。','【客户合规沟通】部分客户要求数据留在本地，合规审核周期可能拉长。','【供应商报价信息】边缘 GPU 交付周期较长，供应商报价仍在变化。'],update:'【试点反馈与客户合规沟通】最近一轮试点中，客户对故障预测的准确度评价较高，但对数据权限和本地部署的要求明显提高。',options:['重点跟踪客户试点转化率及续约意愿','重点跟踪本地化部署和数据合规要求','重点跟踪边缘 GPU 的交付周期与价格','重点跟踪竞争对手开放模型在运维场景中的效果'],evidence:['客户是否愿意把试点转为付费服务','数据权限与本地部署要求是否继续上升','算力交付与成本是否影响服务毛利','竞品是否改变客户对服务效果的预期'],triggers:[]},
-      E2:{id:'E2',kind:'E',domain:'某通信服务企业',title:'工业互联网机会变化',horizon:'未来12个月',context:'某通信服务企业为工业园区提供通信连接、边缘计算和运维服务。公司准备进入工业互联网项目，但各地采购进度、客户需求和站点成本存在较大差异。',goal:'未来 12 个月判断工业互联网机会能否转化为稳定订单，并确定需要持续监测的外部信号。',facts:['【地方采购信息】地方算力采购预算已经出现，但招标时间尚未明确。','【制造客户访谈】制造客户同时关注低时延、本地处理和项目交付周期。','【站点运营记录】边缘站点能源成本与利用率会直接影响项目回报。'],update:'【重点客户最新反馈】一家重点制造客户把低时延指标提高，同时要求供应商说明站点能源消耗和数据安全责任。',options:['跟踪地方算力采购预算与招标节奏','跟踪制造客户对低时延和本地处理的真实需求','跟踪边缘站点能源成本与利用率','跟踪云服务价格和竞争者促销变化'],evidence:['地方采购是否在一个季度内落地','客户低时延指标是否形成统一标准','站点能耗和利用率是否影响项目回报','竞争价格是否改变客户的供应商选择'],triggers:[]},
-      E3:{id:'E3',kind:'E',domain:'某运动用品企业',title:'智能设计与渠道变化',horizon:'未来12个月',context:'某运动用品企业是一家运动用品企业，正在尝试用 AI 生成设计方案、预测渠道需求。项目效果取决于消费者反馈、材料供应、小批量生产和渠道库存的共同变化。',goal:'未来 12 个月判断智能产品机会是否值得扩大投入，并确定需要持续观察的市场信号。',facts:['【平台运营数据】线上用户反馈可以快速回流，但不同平台的流量规则差异较大。','【供应商与生产记录】新材料交期与小批量生产能力尚未完全稳定。','【渠道访谈】核心渠道希望企业降低库存风险，同时要求更快上新。'],update:'【平台转化数据与渠道反馈】某款 AI 辅助设计产品的点击率上升，但首轮转化率和渠道补货意愿仍然分化。',options:['跟踪线上转化率、流量规则和用户反馈','跟踪赛事、季节与品类需求变化','跟踪材料成本和小批量生产能力','跟踪竞品折扣与渠道库存动作'],evidence:['用户是否从点击转为购买并持续反馈','赛事和季节是否改变品类需求','材料和柔性生产是否支撑快速迭代','竞品折扣与库存是否压缩利润空间'],triggers:[]},
-      S1:{id:'S1',kind:'S',domain:'某网络设备企业',title:'服务化路径选择',horizon:'未来12个月',context:'某网络设备企业需要在既定预算和试点周期内选择 AI 运维的成长路径。公司已有两家试点客户，但数据本地化要求和交付能力仍不稳定。',goal:'在未来 12 个月内形成可验证的服务化路径，同时控制试点失败对现有客户关系的影响。',facts:['现有服务团队熟悉客户现场，但缺少 AI 数据工程能力。','客户愿意试用，是否愿意长期付费尚未确定。','公司可以把 AI 模块嵌入现有服务，也可以单独推出 SaaS，或与重点客户共建。'],update:'试点客户要求数据完全本地处理，且其中一家客户把上线时间提前了一个月。',options:['在现有服务中嵌入 AI 运维模块，分阶段扩大','推出独立 SaaS 产品，先覆盖标准化客户','与两家重点客户共建行业解决方案'],evidence:['客户是否愿意付费和续约','数据本地化与合规责任能否承担','现有交付能力能否支持扩张'],triggers:['试点转化率低于 30%','客户数据必须完全本地处理','技术交付无法同时支持两个试点']},
-      S2:{id:'S2',kind:'S',domain:'某通信服务企业',title:'工业互联网扩展路径',horizon:'未来12个月',context:'某通信服务企业准备在既定投入和审批周期内把通信连接能力延伸到工业互联网。公司面对全国扩张、伙伴协同和区域试点三种路径，但对地方采购与现场交付的把握不同。',goal:'在未来 12 个月内选择一条可以形成示范项目、并能逐步复制的扩展路径。',facts:['总部拥有统一平台能力，但各地客户的采购与监管要求差异较大。','本地集成商和设备商掌握客户关系与现场资源。','两个省份的制造客户已经提出低时延和数据安全需求。'],update:'其中一个省份的采购时间推迟，但另一省份愿意为小规模试点开放现场。',options:['由总部统一建设平台并面向全国扩张','与本地集成商和设备商建立伙伴方案','先在两个需求明确的省份做小规模试点'],evidence:['省级采购是否形成明确时间表','伙伴是否能按期完成接口和现场交付','试点能否验证低时延与数据安全要求'],triggers:['省级采购在一个季度内仍未启动','试点低时延指标不达标','伙伴接口无法按期完成']},
-      S3:{id:'S3',kind:'S',domain:'某运动用品企业',title:'智能产品路径选择',horizon:'未来12个月',context:'某运动用品企业需要在下一季准备周期和既定预算内选择 AI 在产品端的切入方式。公司既可以围绕设计打造新系列，也可以先用 AI 改善小批量迭代，或从渠道预测和库存优化开始。',goal:'在未来 12 个月内找到能同时验证产品价值和经营回报的切入路径。',facts:['设计团队愿意使用 AI，但对品牌风格和原创边界有顾虑。','小批量柔性生产能力有限，材料交期存在波动。','线上线下渠道都积累了数据，但尚未形成统一的需求预测机制。'],update:'市场对新系列的关注度较高，然而材料交期延长，且核心渠道要求先降低库存。',options:['先做小批量快速迭代，依据用户反馈再扩大','优先打造高端 AI 设计系列','先把 AI 用于渠道需求预测和库存优化'],evidence:['小批量产品能否快速验证并转化','品牌与原创要求能否被稳定满足','渠道数据能否改善库存和补货决策'],triggers:['小批量首轮转化率低于基准','材料交期再延长两周','核心渠道库存超过安全线']},
-      R1:{id:'R1',kind:'R',domain:'某网络设备企业',title:'AI 运维资源排布',horizon:'首轮试点准备期',context:'某网络设备企业决定把 AI 运维从试点推进到下一阶段。首轮试点需要在既定准备周期内上线，预算只能优先支持一类资源，其他资源需随后补齐。',goal:'选择最先配置的关键资源，使试点能够按时上线并形成可复制的交付经验。',facts:['数据标注和工程能力不足，现有数据质量参差不齐。','边缘 GPU 交付期较长，预算锁定越晚，项目越容易延迟。','客户集成与现场服务团队已经有基础，但需要适配新接口。'],update:'一位重点客户要求两周内明确数据权限；供应商提示 GPU 交期可能再次延长。',options:['先扩充数据标注和数据工程小组','先锁定边缘 GPU 和算力预算','先配置客户集成与现场服务团队'],evidence:['数据权限与数据质量是否能在近期确认','算力资源是否会成为硬约束','现场接口适配是否影响客户验收'],triggers:['客户数据权限未在两周内确认','GPU 交付期再次延长','接口适配工作量超出原估计 30%']},
-      R2:{id:'R2',kind:'R',domain:'某通信服务企业',title:'边缘项目准备',horizon:'边缘项目试点准备期',context:'某通信服务企业准备启动工业互联网边缘项目。项目需要在客户试点窗口内完成准备，同时涉及现场工程、站点设备和数据安全审核，预算只能先补齐一项能力。',goal:'选择最先配置的资源，为项目取得许可、完成试点并通过客户验收创造条件。',facts:['客户试点窗口固定，现场工程师数量不足，跨区域调度成本较高。','边缘站点设备可以租赁，但交付和能源成本需要重新估算。','客户要求项目通过数据安全审核后才能扩大范围。'],update:'客户把低时延指标提高，并要求在试点前提交完整的数据安全责任清单。',options:['先配置工业解决方案和现场工程师','先锁定边缘站点和设备资源','先补齐数据安全与合规审核能力'],evidence:['现场交付能力是否支撑试点','站点与设备是否能按期满足低时延','安全审核是否决定项目能否继续'],triggers:['地方许可无法在 6 周内取得','客户低时延指标需要新增站点','数据安全审核发现高风险项']},
-      R3:{id:'R3',kind:'R',domain:'某运动用品企业',title:'智能产品资源准备',horizon:'下一季产品准备期',context:'某运动用品企业准备扩大 AI 辅助产品项目。下一季产品准备周期和预算均已确定，公司需要在设计协同、柔性生产和渠道数据三类资源中确定先后顺序。',goal:'选择最先配置的资源，使新产品能够快速验证，并降低库存和材料波动带来的风险。',facts:['下一季产品准备周期和预算已经确定，设计团队已经开始使用生成式工具，但筛选与打磨流程尚未稳定。','小批量生产能力有限，材料交期有延长趋势。','渠道数据分散在不同平台，库存看板更新不够及时。'],update:'核心渠道要求把库存控制在安全线以内，供应商同时提示材料交期可能继续延长。',options:['先配置设计师与 AI 协同的筛选团队','先锁定小批量柔性生产能力','先打通线上线下渠道数据和库存看板'],evidence:['设计筛选能否形成稳定的产品输入','柔性生产是否能承受材料交期波动','库存和渠道数据是否能支持补货判断'],triggers:['材料交期继续延长','设计概念通过率低于预期','渠道库存连续两周高于安全线']}
+      E1:{id:'E1',kind:'E',domain:'某网络设备企业',title:'AI 运维需求变化',horizon:'未来12个月',context:'某网络设备企业是一家面向制造业客户提供网络设备与运维服务的企业。公司计划把 AI 运维能力嵌入现有服务，以提高故障预测和远程诊断的效率。',goal:'未来 12 个月判断 AI 运维需求是否会形成可持续的付费市场，并确定下一步观察重点。',facts:['【客户试点记录】两家重点客户愿意安排小范围试点，但尚未承诺续约价格。','【客户合规沟通】部分客户要求数据留在本地，合规审核周期可能拉长。','【供应商报价信息】边缘 GPU 交付周期较长，供应商报价仍在变化。'],options:['重点跟踪客户试点转化率及续约意愿','重点跟踪本地化部署和数据合规要求','重点跟踪边缘 GPU 的交付周期与价格','重点跟踪竞争对手开放模型在运维场景中的效果'],evidence:['客户是否愿意把试点转为付费服务','数据权限与本地部署要求是否继续上升','算力交付与成本是否影响服务毛利','竞品是否改变客户对服务效果的预期'],triggers:[]},
+      E2:{id:'E2',kind:'E',domain:'某通信服务企业',title:'工业互联网机会变化',horizon:'未来12个月',context:'某通信服务企业为工业园区提供通信连接、边缘计算和运维服务。公司准备进入工业互联网项目，但各地采购进度、客户需求和站点成本存在较大差异。',goal:'未来 12 个月判断工业互联网机会能否转化为稳定订单，并确定需要持续监测的外部信号。',facts:['【地方采购信息】地方算力采购预算已经出现，但招标时间尚未明确。','【制造客户访谈】制造客户同时关注低时延、本地处理和项目交付周期。','【站点运营记录】边缘站点能源成本与利用率会直接影响项目回报。'],options:['跟踪地方算力采购预算与招标节奏','跟踪制造客户对低时延和本地处理的真实需求','跟踪边缘站点能源成本与利用率','跟踪云服务价格和竞争者促销变化'],evidence:['地方采购是否在一个季度内落地','客户低时延指标是否形成统一标准','站点能耗和利用率是否影响项目回报','竞争价格是否改变客户的供应商选择'],triggers:[]},
+      E3:{id:'E3',kind:'E',domain:'某运动用品企业',title:'智能设计与渠道变化',horizon:'未来12个月',context:'某运动用品企业是一家运动用品企业，正在尝试用 AI 生成设计方案、预测渠道需求。项目效果取决于消费者反馈、材料供应、小批量生产和渠道库存的共同变化。',goal:'未来 12 个月判断智能产品机会是否值得扩大投入，并确定需要持续观察的市场信号。',facts:['【平台运营数据】线上用户反馈可以快速回流，但不同平台的流量规则差异较大。','【供应商与生产记录】新材料交期与小批量生产能力尚未完全稳定。','【渠道访谈】核心渠道希望企业降低库存风险，同时要求更快上新。'],options:['跟踪线上转化率、流量规则和用户反馈','跟踪赛事、季节与品类需求变化','跟踪材料成本和小批量生产能力','跟踪竞品折扣与渠道库存动作'],evidence:['用户是否从点击转为购买并持续反馈','赛事和季节是否改变品类需求','材料和柔性生产是否支撑快速迭代','竞品折扣与库存是否压缩利润空间'],triggers:[]},
+      S1:{id:'S1',kind:'S',domain:'某网络设备企业',title:'服务化路径选择',horizon:'未来12个月',context:'某网络设备企业需要在既定预算和试点周期内选择 AI 运维的成长路径。公司已有两家试点客户，但数据本地化要求和交付能力仍不稳定。',goal:'在未来 12 个月内形成可验证的服务化路径，同时控制试点失败对现有客户关系的影响。',facts:['现有服务团队熟悉客户现场，但缺少 AI 数据工程能力。','客户愿意试用，是否愿意长期付费尚未确定。','公司可以把 AI 模块嵌入现有服务，也可以单独推出 SaaS，或与重点客户共建。'],options:['在现有服务中嵌入 AI 运维模块，分阶段扩大','推出独立 SaaS 产品，先覆盖标准化客户','与两家重点客户共建行业解决方案'],evidence:['客户是否愿意付费和续约','数据本地化与合规责任能否承担','现有交付能力能否支持扩张'],triggers:['试点转化率低于 30%','客户数据必须完全本地处理','技术交付无法同时支持两个试点']},
+      S2:{id:'S2',kind:'S',domain:'某通信服务企业',title:'工业互联网扩展路径',horizon:'未来12个月',context:'某通信服务企业准备在既定投入和审批周期内把通信连接能力延伸到工业互联网。公司面对全国扩张、伙伴协同和区域试点三种路径，但对地方采购与现场交付的把握不同。',goal:'在未来 12 个月内选择一条可以形成示范项目、并能逐步复制的扩展路径。',facts:['总部拥有统一平台能力，但各地客户的采购与监管要求差异较大。','本地集成商和设备商掌握客户关系与现场资源。','两个省份的制造客户已经提出低时延和数据安全需求。'],options:['由总部统一建设平台并面向全国扩张','与本地集成商和设备商建立伙伴方案','先在两个需求明确的省份做小规模试点'],evidence:['省级采购是否形成明确时间表','伙伴是否能按期完成接口和现场交付','试点能否验证低时延与数据安全要求'],triggers:['省级采购在一个季度内仍未启动','试点低时延指标不达标','伙伴接口无法按期完成']},
+      S3:{id:'S3',kind:'S',domain:'某运动用品企业',title:'智能产品路径选择',horizon:'未来12个月',context:'某运动用品企业需要在下一季准备周期和既定预算内选择 AI 在产品端的切入方式。公司既可以围绕设计打造新系列，也可以先用 AI 改善小批量迭代，或从渠道预测和库存优化开始。',goal:'在未来 12 个月内找到能同时验证产品价值和经营回报的切入路径。',facts:['设计团队愿意使用 AI，但对品牌风格和原创边界有顾虑。','小批量柔性生产能力有限，材料交期存在波动。','线上线下渠道都积累了数据，但尚未形成统一的需求预测机制。'],options:['先做小批量快速迭代，依据用户反馈再扩大','优先打造高端 AI 设计系列','先把 AI 用于渠道需求预测和库存优化'],evidence:['小批量产品能否快速验证并转化','品牌与原创要求能否被稳定满足','渠道数据能否改善库存和补货决策'],triggers:['小批量首轮转化率低于基准','材料交期再延长两周','核心渠道库存超过安全线']},
+      R1:{id:'R1',kind:'R',domain:'某网络设备企业',title:'AI 运维资源排布',horizon:'首轮试点准备期',context:'某网络设备企业决定把 AI 运维从试点推进到下一阶段。首轮试点需要在既定准备周期内上线，预算只能优先支持一类资源，其他资源需随后补齐。',goal:'选择最先配置的关键资源，使试点能够按时上线并形成可复制的交付经验。',facts:['数据标注和工程能力不足，现有数据质量参差不齐。','边缘 GPU 交付期较长，预算锁定越晚，项目越容易延迟。','客户集成与现场服务团队已经有基础，但需要适配新接口。'],options:['先扩充数据标注和数据工程小组','先锁定边缘 GPU 和算力预算','先配置客户集成与现场服务团队'],evidence:['数据权限与数据质量是否能在近期确认','算力资源是否会成为硬约束','现场接口适配是否影响客户验收'],triggers:['客户数据权限未在两周内确认','GPU 交付期再次延长','接口适配工作量超出原估计 30%']},
+      R2:{id:'R2',kind:'R',domain:'某通信服务企业',title:'边缘项目准备',horizon:'边缘项目试点准备期',context:'某通信服务企业准备启动工业互联网边缘项目。项目需要在客户试点窗口内完成准备，同时涉及现场工程、站点设备和数据安全审核，预算只能先补齐一项能力。',goal:'选择最先配置的资源，为项目取得许可、完成试点并通过客户验收创造条件。',facts:['客户试点窗口固定，现场工程师数量不足，跨区域调度成本较高。','边缘站点设备可以租赁，但交付和能源成本需要重新估算。','客户要求项目通过数据安全审核后才能扩大范围。'],options:['先配置工业解决方案和现场工程师','先锁定边缘站点和设备资源','先补齐数据安全与合规审核能力'],evidence:['现场交付能力是否支撑试点','站点与设备是否能按期满足低时延','安全审核是否决定项目能否继续'],triggers:['地方许可无法在 6 周内取得','客户低时延指标需要新增站点','数据安全审核发现高风险项']},
+      R3:{id:'R3',kind:'R',domain:'某运动用品企业',title:'智能产品资源准备',horizon:'下一季产品准备期',context:'某运动用品企业准备扩大 AI 辅助产品项目。下一季产品准备周期和预算均已确定，公司需要在设计协同、柔性生产和渠道数据三类资源中确定先后顺序。',goal:'选择最先配置的资源，使新产品能够快速验证，并降低库存和材料波动带来的风险。',facts:['下一季产品准备周期和预算已经确定，设计团队已经开始使用生成式工具，但筛选与打磨流程尚未稳定。','小批量生产能力有限，材料交期有延长趋势。','渠道数据分散在不同平台，库存看板更新不够及时。'],options:['先配置设计师与 AI 协同的筛选团队','先锁定小批量柔性生产能力','先打通线上线下渠道数据和库存看板'],evidence:['设计筛选能否形成稳定的产品输入','柔性生产是否能承受材料交期波动','库存和渠道数据是否能支持补货判断'],triggers:['材料交期继续延长','设计概念通过率低于预期','渠道库存连续两周高于安全线']}
     };
     /* 正式题面使用短而直接的行动句，避免受访者在选项中猜测题意。 */
     const directCaseText={
@@ -294,32 +294,31 @@
     };
     const initialOptions={E1:0,E2:0,E3:0,S1:0,S2:0,S3:1,R1:0,R2:0,R3:0};
     const multiViews={
-      E1:{initial:{role1:0,role2:1,coord:0},update:{role1:0,role2:1,coord:1},conflict:'市场转化是需求验证，数据合规是落地前置条件。'},
-      E2:{initial:{role1:0,role2:1,coord:1},update:{role1:0,role2:1,coord:2},conflict:'采购端信号与客户使用端信号来源不同，需要先判断哪一条更接近订单落地。'},
-      E3:{initial:{role1:0,role2:2,coord:0},update:{role1:0,role2:2,coord:2},conflict:'用户兴趣代表市场拉力，材料和生产能力代表供给边界。'},
-      S1:{initial:{role1:0,role2:2,coord:0},update:{role1:0,role2:2,coord:2},conflict:'现有服务嵌入强调复制速度，共建方案强调客户适配和责任共担。'},
-      S2:{initial:{role1:0,role2:1,coord:0},update:{role1:0,role2:1,coord:2},conflict:'总部扩张强调规模，伙伴协同强调交付，区域试点强调先拿到真实证据。'},
-      S3:{initial:{role1:1,role2:2,coord:1},update:{role1:0,role2:2,coord:2},conflict:'产品和品牌提供增长空间，渠道与库存决定投入能否承受。'},
-      R1:{initial:{role1:0,role2:1,coord:0},update:{role1:0,role2:1,coord:1},conflict:'数据能力决定输入质量，算力资源决定试点能否按期运行。'},
-      R2:{initial:{role1:0,role2:2,coord:0},update:{role1:0,role2:2,coord:2},conflict:'现场交付推动项目启动，安全审核决定客户是否放行。'},
-      R3:{initial:{role1:0,role2:1,coord:0},update:{role1:0,role2:2,coord:1},conflict:'设计筛选提高产品输入质量，生产和库存条件决定结果能否落地。'}
+      E1:{initial:{role1:0,role2:1,coord:0},conflict:'市场转化是需求验证，数据合规是落地前置条件。'},
+      E2:{initial:{role1:0,role2:1,coord:1},conflict:'采购端信号与客户使用端信号来源不同，需要先判断哪一条更接近订单落地。'},
+      E3:{initial:{role1:0,role2:2,coord:0},conflict:'用户兴趣代表市场拉力，材料和生产能力代表供给边界。'},
+      S1:{initial:{role1:0,role2:2,coord:0},conflict:'现有服务嵌入强调复制速度，共建方案强调客户适配和责任共担。'},
+      S2:{initial:{role1:0,role2:1,coord:0},conflict:'总部扩张强调规模，伙伴协同强调交付，区域试点强调先拿到真实证据。'},
+      S3:{initial:{role1:1,role2:2,coord:1},conflict:'产品和品牌提供增长空间，渠道与库存决定投入能否承受。'},
+      R1:{initial:{role1:0,role2:1,coord:0},conflict:'数据能力决定输入质量，算力资源决定试点能否按期运行。'},
+      R2:{initial:{role1:0,role2:2,coord:0},conflict:'现场交付推动项目启动，安全审核决定客户是否放行。'},
+      R3:{initial:{role1:0,role2:1,coord:0},conflict:'设计筛选提高产品输入质量，生产和库存条件决定结果能否落地。'}
     };
     function focus(c){return taskFocus[c.kind]||''}
     function multiView(c,phase){const all=multiViews[c.id]||{};return {...(all[phase]||{role1:0,role2:1,coord:0}),conflict:all.conflict||'两个角色关注的判断对象不同，需要协调后形成共同选择。'}}
     function multiReason(c,role,phase,choice){
-      const changed=phase==='update';
       if(c.kind==='E') return role===0
-        ? `${c.evidence[0]}是最直接的需求信号，${changed?c.update+'因此需要重新看客户信号的优先级。':'先用客户反馈确认外部变化是否与本企业业务相关。'}当前选择为${choice}。`
-        : `${c.evidence[1]||c.evidence[0]}决定信号能否落到交付和合规，${changed?c.update+'使这一条件更加突出。':'先核验实施条件，再判断需求信号能否转为订单。'}当前选择为${choice}。`;
+        ? `${c.evidence[0]}是最直接的需求信号，先用客户反馈确认外部变化是否与本企业业务相关。当前选择为${choice}。`
+        : `${c.evidence[1]||c.evidence[0]}决定信号能否落到交付和合规，先核验实施条件，再判断需求信号能否转为订单。当前选择为${choice}。`;
       if(c.kind==='S') return role===0
-        ? `${c.evidence[0]}决定路径能否获得客户价值和市场反馈，${changed?c.update+'改变了原有路径的时间假设。':'先从路径的验证速度和客户价值出发。'}当前选择为${choice}。`
-        : `${c.evidence[1]||c.evidence[0]}决定路径能否交付或复制，${changed?c.update+'需要同步调整行动顺序。':'先检查路径成立所需的技术、责任和交付条件。'}当前选择为${choice}。`;
+        ? `${c.evidence[0]}决定路径能否获得客户价值和市场反馈，先从路径的验证速度和客户价值出发。当前选择为${choice}。`
+        : `${c.evidence[1]||c.evidence[0]}决定路径能否交付或复制，先检查路径成立所需的技术、责任和交付条件。当前选择为${choice}。`;
       return role===0
-        ? `${c.evidence[0]}决定试点能否形成有效输入或按时启动，${changed?c.update+'使资源先后顺序需要更新。':'先补上最靠近任务结果的资源缺口。'}当前选择为${choice}。`
-        : `${c.evidence[1]||c.evidence[0]}决定资源组合能否按时运行，${changed?c.update+'提高了这一依赖的优先级。':'先检查预算、到位时间和跨资源依赖。'}当前选择为${choice}。`;
+        ? `${c.evidence[0]}决定试点能否形成有效输入或按时启动，先补上最靠近任务结果的资源缺口。当前选择为${choice}。`
+        : `${c.evidence[1]||c.evidence[0]}决定资源组合能否按时运行，先检查预算、到位时间和跨资源依赖。当前选择为${choice}。`;
     }
     function multiAgentBody(c,arch,phase){
-      const v=multiView(c,phase), label=phase==='initial'?'初步选择':'结合新增信息后的选择';
+      const v=multiView(c,'initial'), label='AI 基于案例信息的选择';
       const r1=optionText(c,v.role1), r2=optionText(c,v.role2), rc=optionText(c,v.coord);
       const reason1=multiReason(c,0,phase,r1), reason2=multiReason(c,1,phase,r2);
       const nature=c.kind==='E'?'需求信号与实施条件的先后顺序不同':(c.kind==='S'?'路径收益与交付约束的权衡不同':'资源价值与到位依赖的顺序不同');
@@ -336,9 +335,7 @@
     }
     function aiMaterial(c,arch){
       const showConfig=document.getElementById('showConfig').value==='yes';
-      const header=`<div class="ai-title"><span class="material-id">AI 分析材料 · 只读</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>`;
-      const update=`<span class="ai-inline-update">新增信息：${c.update}</span>`;
-      const updateLine=`<div class="ai-update-line"><strong>本轮新增经营信息</strong><span>${c.update}</span></div>`;
+      const header=`<div class="ai-title"><span class="material-id">AI 分析材料 · 基于案例信息</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>`;
       const livedContext=`<div class="ai-human-note"><strong>放回经营现场：</strong>${detail(c,'human')} <strong>还要同时核对：</strong>${detail(c,'stakeholders')} ${detail(c,'constraints')} <strong>接下来：</strong>团队把客户承担意愿、资源到位时间和验收责任说清楚，再决定继续、调整还是暂停投入。</div>`;
       let body='';
       if(arch==='G1'){
@@ -360,10 +357,10 @@
       }else if(arch==='G3'){
         const roles=roleNames[c.kind];
         const role1=c.kind==='E'
-          ? `${c.evidence[0]}显示机会仍值得跟踪，但${c.update}说明兴趣尚未转化为稳定需求。建议优先观察${preferredText(c)}。`
+          ? `${c.evidence[0]}显示机会仍值得跟踪，但现有事实还不足以证明稳定需求。建议优先观察${preferredText(c)}。`
           : c.kind==='S'
-          ? `现有事实支持先验证${preferredText(c)}。${c.update}改变了原有排序，客户或业务价值仍需通过小范围行动确认。`
-          : `先识别${c.evidence[0]}所对应的缺口。${c.update}说明资源顺序不能只按局部效率决定，应先处理可能阻断试点的事项。`;
+          ? `现有事实支持先验证${preferredText(c)}，客户或业务价值仍需通过小范围行动确认。`
+          : `先识别${c.evidence[0]}所对应的缺口。资源顺序不能只按局部效率决定，应先处理可能阻断试点的事项。`;
         const role2=c.kind==='E'
           ? `${c.evidence[1]||c.evidence[0]}可能限制信号的解释和实施，${c.facts[2]}也需要同步关注。`
           : c.kind==='S'
@@ -378,10 +375,10 @@
       }else{
         const roles=roleNames[c.kind];
         const role1=c.kind==='E'
-          ? `<div><strong>依据：</strong>${c.facts[0]}；${c.update}</div><div><strong>判断关系：</strong>${c.evidence[0]}值得继续跟踪，但尚不足以证明稳定需求。</div><div><strong>成立条件：</strong>客户愿意继续投入，且试点条件能够承受。</div><div><strong>更新触发点：</strong>${c.triggers[0]||'客户反馈和实施条件出现明显变化时。'}</div>`
+          ? `<div><strong>依据：</strong>${c.facts[0]}</div><div><strong>判断关系：</strong>${c.evidence[0]}值得继续跟踪，但尚不足以证明稳定需求。</div><div><strong>成立条件：</strong>客户愿意继续投入，且试点条件能够承受。</div><div><strong>检查条件：</strong>${c.triggers[0]||'客户反馈和实施条件出现明显变化时。'}</div>`
           : c.kind==='S'
-          ? `<div><strong>依据：</strong>${c.facts[0]}；${c.update}</div><div><strong>判断关系：</strong>${preferredText(c)}具有验证价值，但${c.evidence[1]||c.evidence[0]}限制复制或扩张。</div><div><strong>成立条件：</strong>关键依赖可控，且行动能够获得下一轮反馈。</div><div><strong>更新触发点：</strong>${c.triggers[0]||'关键假设不成立时重新排序。'}</div>`
-          : `<div><strong>依据：</strong>${c.facts[0]}；${c.update}</div><div><strong>判断关系：</strong>${c.evidence[0]}是前置缺口，${c.evidence[1]||c.evidence[0]}是到位和执行风险。</div><div><strong>成立条件：</strong>前置资源先确认，再按里程碑分阶段投入。</div><div><strong>更新触发点：</strong>${c.triggers[0]||'资源到位时间或需求条件发生变化时。'}</div>`;
+          ? `<div><strong>依据：</strong>${c.facts[0]}</div><div><strong>判断关系：</strong>${preferredText(c)}具有验证价值，但${c.evidence[1]||c.evidence[0]}限制复制或扩张。</div><div><strong>成立条件：</strong>关键依赖可控，且行动能够获得下一轮反馈。</div><div><strong>检查条件：</strong>${c.triggers[0]||'关键假设不成立时重新排序。'}</div>`
+          : `<div><strong>依据：</strong>${c.facts[0]}</div><div><strong>判断关系：</strong>${c.evidence[0]}是前置缺口，${c.evidence[1]||c.evidence[0]}是到位和执行风险。</div><div><strong>成立条件：</strong>前置资源先确认，再按里程碑分阶段投入。</div><div><strong>检查条件：</strong>${c.triggers[0]||'资源到位时间或需求条件发生变化时。'}</div>`;
         const role2=c.kind==='E'
           ? `<div><strong>依据：</strong>${c.facts[1]||c.facts[0]}；${c.facts[2]||c.facts[0]}</div><div><strong>判断关系：</strong>${c.evidence[1]||c.evidence[0]}会影响需求信号能否转化为业务结果。</div><div><strong>成立条件：</strong>数据、交付或合规要求能够在试点周期内满足。</div><div><strong>更新触发点：</strong>${c.triggers[1]||c.triggers[0]||'实施条件继续收紧时。'}</div>`
           : c.kind==='S'
@@ -392,7 +389,7 @@
           : c.kind==='S'
           ? `两份意见共同指向“先验证、后扩张”。${c.evidence[1]||c.evidence[0]}是${preferredText(c)}能否复制的关键边界；若该条件恶化，应按触发点收缩或改选路径。`
           : `两份意见共同说明资源需要按依赖排序。${c.evidence[0]}应先处理，${c.evidence[1]||c.evidence[0]}再按里程碑配置；若${c.triggers[0]||'前置条件'}出现，暂停扩大投入。`;
-        body=`<div class="ai-structured ai-role"><div class="role-head">${roles[0]}</div>${role1}</div><div class="ai-structured ai-role"><div class="role-head">${roles[1]}</div>${role2}</div><div class="ai-coordinator"><div class="role-head">协调者综合与更新</div><p><strong>共同点与差异：</strong>${synthesis}</p><p><strong>综合建议：</strong>优先${preferredText(c)}，并保留下一轮根据触发点修订的空间。</p></div>`;
+        body=`<div class="ai-structured ai-role"><div class="role-head">${roles[0]}</div>${role1}</div><div class="ai-structured ai-role"><div class="role-head">${roles[1]}</div>${role2}</div><div class="ai-coordinator"><div class="role-head">协调者综合</div><p><strong>共同点与差异：</strong>${synthesis}</p><p><strong>综合建议：</strong>优先${preferredText(c)}，并保留下一轮根据检查条件修订的空间。</p></div>`;
       }
       if(arch==='G3'||arch==='G4') body=multiAgentBody(c,arch,'update');
       const plainBody=body
@@ -407,7 +404,7 @@
         .replaceAll('仍需通过小范围行动确认','可以通过小范围行动确认')
         .replaceAll('兴趣尚未转化为稳定需求','兴趣还需要用转化和续约数据确认')
         .replaceAll('可能推翻当前排序','会直接影响当前排序');
-      return `<div class="ai-card"><div class="ai-title"><span class="material-id">AI 分析材料 · 只读</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>${updateLine}${plainBody}${livedContext}</div>`;
+      return `<div class="ai-card"><div class="ai-title"><span class="material-id">AI 分析材料 · 基于案例信息</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>${plainBody}${livedContext}</div>`;
     }
     const query = new URLSearchParams(location.search);
     const publicMode = query.get('public')==='1';
@@ -527,7 +524,7 @@
       const teamInstruction=teamView?'团队成员的个人投票已经由后台汇总；当前页面由团队记录员填写补充记录。':(memberView?'请在团队讨论后提交你自己的最终选择；系统会按公司名称和成员身份把你的答案与另外两位成员的答案自动合并。':'正式发放时，三位成员使用同一个链接，各自填写公司和成员身份；当前页面同时显示三个成员栏位，仅用于研究者预览。');
       const teamTitle=teamView?'四、团队记录与系统结果':(memberView?'四、个人最终投票（后台自动归组）':'四、团队最终决策（多数表决，系统自动计算）');
       const teamRule=teamView?'三位成员的主决策由系统按多数规则生成；本页面只记录团队讨论后的补充信息。':(memberView?'本部分只记录你的个人最终投票，不代表你代替其他成员作答；后台会按公司归组，在三位成员都提交后生成团队答案。':'所有成员先独立判断并阅读同一份 AI 分析材料；团队讨论后，三位成员分别提交一个最终选择。第一轮获得至少 2 票的选项形成团队答案；若没有选项获得 2 票，进入第二轮多数表决。这里记录的是团队最终采取的方案，不是个人答案的平均值。');
-      return `<article class="task" data-task="${c.id}"><div class="task-head"><div><div class="task-no">TASK 0${index+1} · ${kindName}</div><div class="task-title">${c.domain}｜${c.title}</div></div><div class="task-type">${c.id} · 固定情景</div></div><div class="task-body"><div class="case-meta"><span class="tag">先导任务：${kindName}</span><span class="tag">判断周期：${c.horizon||'未来 12 个月'}</span><span class="tag">先独立作答</span></div><div class="case-text"><p><strong>情景：</strong>${c.context}</p><p><strong>经营背景：</strong>${detail(c,'background')}</p><p><strong>相关方与现实约束：</strong>${detail(c,'stakeholders')} ${detail(c,'constraints')}</p><p><strong>本轮判断的边界：</strong>${detail(c,'decision')}</p><p><strong>本题要判断：</strong>${c.goal}</p><p><strong>已知信息：</strong></p><ul class="fact-list">${c.facts.map(x=>`<li>${x}</li>`).join('')}</ul><p><strong>新出现的信息：</strong>${c.update}</p></div><div class="choice-box"><h4>一、AI 材料出现前：你的初始判断</h4><p class="helper">请选择一个你认为最重要的选项，再填写判断概率和把握程度。</p><div class="choice-list">${choices(c,'initial')}</div><label class="field">你认为所选主判断最终成立的概率（0—100%） *<input required type="number" min="0" max="100" name="${c.id}-initial-prob" placeholder="例如：65"><div class="helper">0 表示几乎不可能；100 表示几乎确定。</div></label><div style="margin-top:11px"><span class="field">你对初始判断的把握程度 *${confidence(c.id+'-initial-confidence')}</span></div></div><div class="ai-stage"><span class="stage-num">02</span><div><strong>AI 介入环节｜请在这里阅读 AI 材料</strong><p>这张材料包含已知事实、AI 分析和一条新增经营信息。三位成员看到同一份内容；这里只需阅读，不需要填写。</p></div></div>${aiMaterial(c,arch)}<div class="after-ai">阅读完成后，请继续回答最终判断</div><div class="choice-box"><h4>三、阅读 AI 材料后：你的最终判断</h4><p class="helper">可以维持初始判断，也可以根据材料调整。</p><div class="choice-list">${choices(c,'final')}</div><label class="field">你认为所选主判断最终成立的概率（0—100%） *<input required type="number" min="0" max="100" name="${c.id}-final-prob" placeholder="例如：70"><div class="helper">0 表示几乎不可能；100 表示几乎确定。</div></label><div style="margin-top:11px"><span class="field">你对最终判断的把握程度 *${confidence(c.id+'-final-confidence')}</span></div><label class="field" style="margin-top:13px">AI 材料对你最终判断的影响程度 *<select required name="${c.id}-ai-influence"><option value="">请选择</option><option>1．几乎没有影响</option><option>2．影响较小</option><option>3．中等影响</option><option>4．影响较大</option><option>5．影响很大</option></select></label></div><div class="team-box"><h4>${teamTitle}</h4><div class="team-rule"><strong>固定决策规则：</strong>${teamRule}</div><p class="helper">${teamInstruction}</p>${teamFields(c)}</div></div></article>`;
+      return `<article class="task" data-task="${c.id}"><div class="task-head"><div><div class="task-no">TASK 0${index+1} · ${kindName}</div><div class="task-title">${c.domain}｜${c.title}</div></div><div class="task-type">${c.id} · 固定情景</div></div><div class="task-body"><div class="case-meta"><span class="tag">先导任务：${kindName}</span><span class="tag">判断周期：${c.horizon||'未来 12 个月'}</span><span class="tag">先独立作答</span></div><div class="case-text"><p><strong>情景：</strong>${c.context}</p><p><strong>经营背景：</strong>${detail(c,'background')}</p><p><strong>相关方与现实约束：</strong>${detail(c,'stakeholders')} ${detail(c,'constraints')}</p><p><strong>本轮判断的边界：</strong>${detail(c,'decision')}</p><p><strong>本题要判断：</strong>${c.goal}</p><p><strong>已知信息：</strong></p><ul class="fact-list">${c.facts.map(x=>`<li>${x}</li>`).join('')}</ul></div><div class="choice-box"><h4>一、AI 材料出现前：你的初始判断</h4><p class="helper">请选择一个你认为最重要的选项，再填写判断概率和把握程度。</p><div class="choice-list">${choices(c,'initial')}</div><label class="field">你认为所选主判断最终成立的概率（0—100%） *<input required type="number" min="0" max="100" name="${c.id}-initial-prob" placeholder="例如：65"><div class="helper">0 表示几乎不可能；100 表示几乎确定。</div></label><div style="margin-top:11px"><span class="field">你对初始判断的把握程度 *${confidence(c.id+'-initial-confidence')}</span></div></div><div class="ai-stage"><span class="stage-num">02</span><div><strong>AI 介入环节｜请在这里阅读 AI 材料</strong><p>这张材料只使用案例卡片中已经提供的事实，不新增任何信息；AI 只展示整理、分工和判断逻辑。三位成员看到同一份内容；这里只需阅读，不需要填写。</p></div></div>${aiMaterial(c,arch)}<div class="after-ai">阅读完成后，请继续回答最终判断</div><div class="choice-box"><h4>三、阅读 AI 材料后：你的最终判断</h4><p class="helper">可以维持初始判断，也可以根据材料调整。</p><div class="choice-list">${choices(c,'final')}</div><label class="field">你认为所选主判断最终成立的概率（0—100%） *<input required type="number" min="0" max="100" name="${c.id}-final-prob" placeholder="例如：70"><div class="helper">0 表示几乎不可能；100 表示几乎确定。</div></label><div style="margin-top:11px"><span class="field">你对最终判断的把握程度 *${confidence(c.id+'-final-confidence')}</span></div><label class="field" style="margin-top:13px">AI 材料对你最终判断的影响程度 *<select required name="${c.id}-ai-influence"><option value="">请选择</option><option>1．几乎没有影响</option><option>2．影响较小</option><option>3．中等影响</option><option>4．影响较大</option><option>5．影响很大</option></select></label></div><div class="team-box"><h4>${teamTitle}</h4><div class="team-rule"><strong>固定决策规则：</strong>${teamRule}</div><p class="helper">${teamInstruction}</p>${teamFields(c)}</div></div></article>`;
     }
     const baseRenderTask=renderTask;
     renderTask=function(c,index,arch){
