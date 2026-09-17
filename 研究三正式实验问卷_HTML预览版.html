@@ -507,7 +507,8 @@
         .replaceAll('仍然分化','目前还不一致')
         .replaceAll('预算只能优先支持','预算先支持')
         .replaceAll('预算只能先补齐','预算先补齐')
-        .replaceAll('本部分只记录你的个人最终投票，不代表你代替其他成员作答；后台会按公司归组，在三位成员都提交后生成团队答案。','这里提交你的个人最终投票，后台会按公司归组，在三位成员完成后生成团队答案。');
+        .replaceAll('本部分只记录你的个人最终投票，不代表你代替其他成员作答；后台会按公司归组，在三位成员都提交后生成团队答案。','这里提交你的个人最终投票，后台会按公司归组，在三位成员完成后生成团队答案。')
+        .replace(/<label class="field">你判断这项选择最终成立的概率[\s\S]*?<\/label>/g,'');
     };
     function applyBackendAssignment(){
       const backendValues={team_id:query.get('team')||'',member_id:query.get('memberId')||'',architecture_id:query.get('archId')||query.get('arch')||''};
