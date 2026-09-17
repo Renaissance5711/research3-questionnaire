@@ -431,7 +431,7 @@
     const publicMode = query.get('public')==='1';
     const memberView = ['1','2','3'].includes(query.get('member')) ? Number(query.get('member')) : (publicMode ? 1 : null);
     const teamView = query.get('mode')==='team';
-    const managerView = query.get('manager')==='1' || query.get('view')==='manager';
+    const managerView = query.get('manager')==='1' || query.get('view')==='manager' || location.pathname.endsWith('/manager.html');
     function stableHash(text){let h=0; for(let i=0;i<text.length;i++) h=((h<<5)-h+text.charCodeAt(i))|0; return Math.abs(h)}
     function normalizeCompany(value){return String(value||'').replace(/[\s　]+/g,'').replace(/[（(].*?[）)]/g,'').replace(/有限公司|有限责任公司|股份有限公司|集团公司|集团$/g,'').toLowerCase()}
     const apiBase=(query.get('api')||'').replace(/\/$/,'');
