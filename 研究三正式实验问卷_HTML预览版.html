@@ -59,7 +59,8 @@
     .footer-actions{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:30px;padding-top:18px;border-top:1px solid var(--line)}.btn{border:1px solid var(--dark);background:var(--dark);color:#fff;padding:12px 20px;border-radius:4px;font:inherit;font-weight:700;cursor:pointer}.btn:hover{background:#15242d}.btn.secondary{background:#fff;color:var(--dark)}.btn.accent{background:var(--accent);border-color:var(--accent)}
     .result{display:none;margin-top:20px;border:1px solid #b9c9bd;background:#eef6f0;padding:16px 18px;color:#254a31}.result.show{display:block}.result strong{display:block;margin-bottom:5px}.required-note{font-size:12px;color:var(--muted)}
     .researcher-note{font-size:12px;color:#6c777c;text-align:center;margin-top:25px}
-    @media(max-width:780px){.shell{padding:0 15px}.progress{overflow-x:auto;justify-content:flex-start}.progress-line{min-width:20px}.progress-step{font-size:11px}.grid.two,.grid.three,.preview-grid,.team-grid{grid-template-columns:1fr}.section-head{display:block}.task-head{display:block}.task-type{display:inline-block;margin-top:12px}.scale{overflow-x:auto}.scale-head,.scale-row{min-width:590px}.scale-head{grid-template-columns:minmax(260px,1fr) repeat(5,64px)}section.block{padding:21px 17px}.task-body{padding:18px 15px}.footer-actions{align-items:stretch;flex-direction:column}.footer-actions .btn{width:100%}}
+    .manager-panel{display:none}.manager-intro{border-left:4px solid var(--dark);background:#eef1f2;padding:15px 17px;margin-bottom:24px;color:#43525b;font-size:13px}.manager-case{border:1px solid #c9d0d3;background:#fff;margin:22px 0;box-shadow:0 8px 24px rgba(23,35,45,.06)}.manager-case-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:19px 22px;background:#f1f3f3;border-bottom:1px solid var(--line)}.manager-case-head h3{font-family:Georgia,"Songti SC","STSong",serif;font-size:22px;margin:2px 0 0;color:var(--dark)}.manager-case-code{color:var(--accent);font-size:11px;letter-spacing:.12em;font-weight:800}.manager-case-body{padding:21px 22px}.manager-case-body p{margin:8px 0;font-size:13px}.manager-case-body strong{color:var(--dark)}.manager-facts{margin:8px 0 14px;padding-left:20px;font-size:13px}.manager-facts li{margin:4px 0}.manager-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 22px}.manager-option{border:1px solid #d8dfe1;background:#fafbfa;padding:9px 11px;font-size:13px}.manager-arch-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}.manager-arch{border:1px solid #ccd4d6;background:#fff}.manager-arch summary{cursor:pointer;list-style:none;padding:12px 14px;background:#f4f5f5;border-bottom:1px solid #dce1e2;font-weight:800;color:var(--dark)}.manager-arch summary::-webkit-details-marker{display:none}.manager-arch summary:after{content:"＋";float:right;color:var(--accent);font-size:17px}.manager-arch[open] summary:after{content:"－"}.manager-arch .ai-card{margin:0;border:0;border-left:4px solid var(--dark);box-shadow:none}.manager-arch .config-chip{display:inline-block}.manager-panel .section-head{margin-bottom:18px}
+    @media(max-width:780px){.shell{padding:0 15px}.progress{overflow-x:auto;justify-content:flex-start}.progress-line{min-width:20px}.progress-step{font-size:11px}.grid.two,.grid.three,.preview-grid,.team-grid{grid-template-columns:1fr}.section-head{display:block}.task-head{display:block}.task-type{display:inline-block;margin-top:12px}.scale{overflow-x:auto}.scale-head,.scale-row{min-width:590px}.scale-head{grid-template-columns:minmax(260px,1fr) repeat(5,64px)}section.block{padding:21px 17px}.task-body{padding:18px 15px}.footer-actions{align-items:stretch;flex-direction:column}.footer-actions .btn{width:100%}.manager-case-head{display:block}.manager-options,.manager-arch-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -130,6 +131,11 @@
         <div id="result" class="result"><strong>本地预览已完成</strong><span id="resultText"></span></div>
       </section>
     </form>
+    <section class="block manager-panel" id="managerPanel">
+      <div class="section-head"><div><div class="section-kicker">Researcher / Manager view</div><h2>9个案例与4种 AI 架构总览</h2></div><div class="required-note">仅供研究者检查</div></div>
+      <div class="manager-intro"><strong>管理者视角：</strong>下面按案例列出共同的案例信息、选项，以及 G1—G4 四种 AI 架构的完整分析。四种架构使用完全相同的案例事实；差别只在于 AI 如何组织、分工和综合这些事实。此页面不收集问卷答案。</div>
+      <div id="managerMount"></div>
+    </section>
     <p class="researcher-note">研究者提示：正式上线时，删除“研究者预览控件”，由后台分配任务组合与 AI 架构；保留本页题目、顺序和固定选项。</p>
   </main>
 
@@ -423,6 +429,7 @@
     const publicMode = query.get('public')==='1';
     const memberView = ['1','2','3'].includes(query.get('member')) ? Number(query.get('member')) : (publicMode ? 1 : null);
     const teamView = query.get('mode')==='team';
+    const managerView = query.get('manager')==='1' || query.get('view')==='manager';
     function stableHash(text){let h=0; for(let i=0;i<text.length;i++) h=((h<<5)-h+text.charCodeAt(i))|0; return Math.abs(h)}
     function normalizeCompany(value){return String(value||'').replace(/[\s　]+/g,'').replace(/[（(].*?[）)]/g,'').replace(/有限公司|有限责任公司|股份有限公司|集团公司|集团$/g,'').toLowerCase()}
     const apiBase=(query.get('api')||'').replace(/\/$/,'');
@@ -605,6 +612,21 @@
       if(teamView) document.querySelectorAll('.choice-box input,.choice-box select,.choice-box textarea').forEach(el=>el.disabled=true);
       if(!memberView&&!teamView) document.querySelectorAll('[data-vote-main]').forEach(x=>x.addEventListener('change',()=>updateVoteSummary(cases[x.dataset.voteMain])));
     }
+    function renderManagerView(){
+      document.body.classList.add('manager-mode');
+      document.querySelector('header .subtitle').textContent='研究者总览：查看9个案例的共同事实，以及4种 AI 架构如何基于同一组事实形成不同分析。';
+      document.querySelector('.progress-wrap').style.display='none';
+      document.getElementById('surveyForm').style.display='none';
+      document.querySelector('.researcher-note').style.display='none';
+      document.getElementById('showConfig').value='yes';
+      const panel=document.getElementById('managerPanel'); panel.style.display='block';
+      const arches=['G1','G2','G3','G4'];
+      document.getElementById('managerMount').innerHTML=Object.values(cases).map((c,index)=>{
+        const options=c.options.map((x,i)=>`<div class="manager-option"><strong>${String.fromCharCode(65+i)}．</strong>${x}</div>`).join('');
+        const materials=arches.map(arch=>`<details class="manager-arch" open><summary>${arch} · ${archNames[arch]}</summary>${aiMaterial(c,arch)}</details>`).join('');
+        return `<article class="manager-case"><div class="manager-case-head"><div><div class="manager-case-code">CASE 0${index+1} · ${c.kind==='E'?'环境预见':c.kind==='S'?'战略推演':'资源准备'}</div><h3>${c.id}｜${c.domain}｜${c.title}</h3></div><span class="tag dark">共同案例信息</span></div><div class="manager-case-body"><p><strong>情景：</strong>${c.context}</p><p><strong>经营背景：</strong>${detail(c,'background')}</p><p><strong>涉及的人和要考虑的条件：</strong>${detail(c,'stakeholders')} ${detail(c,'constraints')}</p><p><strong>做决定时看什么：</strong>${detail(c,'decision')}</p><p><strong>这道题要回答：</strong>${c.goal}</p><p><strong>已知信息：</strong></p><ul class="manager-facts">${c.facts.map(x=>`<li>${x}</li>`).join('')}</ul><p><strong>判断选项：</strong></p><div class="manager-options">${options}</div><h4>四种 AI 架构的分析</h4><div class="manager-arch-grid">${materials}</div></div></article>`;
+      }).join('');
+    }
     function validateTeamChecks(){
       for(const c of chosenCases()){
         if(teamView) continue;
@@ -620,14 +642,18 @@
       return '';
     }
     applyBackendAssignment();
-    renderBi(); renderTasks();
+    if(managerView){
+      renderManagerView();
+    }else{
+      renderBi(); renderTasks();
+    }
       if(publicMode){
         document.getElementById('taskArea').style.display='none';
         document.querySelector('[name="company_name"]')?.addEventListener('change',assignPublicGroup);
         document.querySelector('[name="member_slot"]')?.addEventListener('change',assignPublicGroup);
       }
-    if(!memberView&&!teamView) ['pairSelect','archSelect','caseE','caseS','caseR','showConfig'].forEach(id=>document.getElementById(id).addEventListener('change',renderTasks));
-    document.getElementById('submitBtn').addEventListener('click',async()=>{
+    if(!managerView&&!memberView&&!teamView) ['pairSelect','archSelect','caseE','caseS','caseR','showConfig'].forEach(id=>document.getElementById(id).addEventListener('change',renderTasks));
+    if(!managerView) document.getElementById('submitBtn').addEventListener('click',async()=>{
       const form=document.getElementById('surveyForm'); const custom=validateTeamChecks();
       if(custom){alert(custom);return}
       if(!form.checkValidity()){form.reportValidity();return}
