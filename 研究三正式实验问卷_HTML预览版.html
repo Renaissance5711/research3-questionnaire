@@ -164,7 +164,7 @@
       S1:{goal:'未来 12 个月，哪条路径最适合先验证 AI 运维服务化？',options:['嵌入现有服务，先做小范围试点','做独立 SaaS，先服务标准化客户','和两家重点客户共同开发方案']},
       S2:{goal:'未来 12 个月，哪条路径最适合先做出示范项目并复制？',options:['总部统一建设平台，直接全国扩张','与本地伙伴共同交付','先在两个省做小规模试点']},
       S3:{goal:'未来 12 个月，哪条路径最适合同时验证产品价值和经营回报？',options:['先做小批量迭代，再按反馈扩展','先做高端 AI 设计系列','先做渠道预测和库存优化']},
-      R1:{goal:'试点开始前，哪项资源最应该先配置？',options:['先补数据标注和数据工程','先锁定边缘 GPU 和算力预算','先配客户集成与现场服务']},
+      R1:{goal:'试点开始前，哪项资源最应该先配置？',options:['先补齐数据权限管理和数据工程能力','先锁定边缘 GPU 和算力预算','先配客户集成与现场服务']},
       R2:{goal:'项目启动前，哪项资源最应该先配置？',options:['先配现场工程和交付人员','先锁定边缘站点与设备','先补数据安全与合规审核']},
       R3:{goal:'下一季产品准备中，哪项资源最应该先配置？',options:['先组建设计师与 AI 协同筛选团队','先锁定小批量柔性生产','先打通渠道数据和库存看板']}
     };
@@ -287,6 +287,55 @@
         : `重点检查资源到位时间、预算占用和行动风险，关注${c.evidence[1]||c.evidence[0]}。`;
     }
 
+    const taskFocus={
+      E:'辨认外部信号的来源和强度，再判断它与本企业业务的关联。',
+      S:'找出路径背后的关键假设，判断新事实会怎样改变行动后果。',
+      R:'把预算、时间窗口和前置依赖排成一套能执行的准备顺序。'
+    };
+    const initialOptions={E1:0,E2:0,E3:0,S1:0,S2:0,S3:1,R1:0,R2:0,R3:0};
+    const multiViews={
+      E1:{initial:{role1:0,role2:1,coord:0},update:{role1:0,role2:1,coord:1},conflict:'市场转化是需求验证，数据合规是落地前置条件。'},
+      E2:{initial:{role1:0,role2:1,coord:1},update:{role1:0,role2:1,coord:2},conflict:'采购端信号与客户使用端信号来源不同，需要先判断哪一条更接近订单落地。'},
+      E3:{initial:{role1:0,role2:2,coord:0},update:{role1:0,role2:2,coord:2},conflict:'用户兴趣代表市场拉力，材料和生产能力代表供给边界。'},
+      S1:{initial:{role1:0,role2:2,coord:0},update:{role1:0,role2:2,coord:2},conflict:'现有服务嵌入强调复制速度，共建方案强调客户适配和责任共担。'},
+      S2:{initial:{role1:0,role2:1,coord:0},update:{role1:0,role2:1,coord:2},conflict:'总部扩张强调规模，伙伴协同强调交付，区域试点强调先拿到真实证据。'},
+      S3:{initial:{role1:1,role2:2,coord:1},update:{role1:0,role2:2,coord:2},conflict:'产品和品牌提供增长空间，渠道与库存决定投入能否承受。'},
+      R1:{initial:{role1:0,role2:1,coord:0},update:{role1:0,role2:1,coord:1},conflict:'数据能力决定输入质量，算力资源决定试点能否按期运行。'},
+      R2:{initial:{role1:0,role2:2,coord:0},update:{role1:0,role2:2,coord:2},conflict:'现场交付推动项目启动，安全审核决定客户是否放行。'},
+      R3:{initial:{role1:0,role2:1,coord:0},update:{role1:0,role2:2,coord:1},conflict:'设计筛选提高产品输入质量，生产和库存条件决定结果能否落地。'}
+    };
+    function focus(c){return taskFocus[c.kind]||''}
+    function multiView(c,phase){const all=multiViews[c.id]||{};return {...(all[phase]||{role1:0,role2:1,coord:0}),conflict:all.conflict||'两个角色关注的判断对象不同，需要协调后形成共同选择。'}}
+    function multiReason(c,role,phase,choice){
+      const changed=phase==='update';
+      if(c.kind==='E') return role===0
+        ? `${c.evidence[0]}是最直接的需求信号，${changed?c.update+'因此需要重新看客户信号的优先级。':'先用客户反馈确认外部变化是否与本企业业务相关。'}当前选择为${choice}。`
+        : `${c.evidence[1]||c.evidence[0]}决定信号能否落到交付和合规，${changed?c.update+'使这一条件更加突出。':'先核验实施条件，再判断需求信号能否转为订单。'}当前选择为${choice}。`;
+      if(c.kind==='S') return role===0
+        ? `${c.evidence[0]}决定路径能否获得客户价值和市场反馈，${changed?c.update+'改变了原有路径的时间假设。':'先从路径的验证速度和客户价值出发。'}当前选择为${choice}。`
+        : `${c.evidence[1]||c.evidence[0]}决定路径能否交付或复制，${changed?c.update+'需要同步调整行动顺序。':'先检查路径成立所需的技术、责任和交付条件。'}当前选择为${choice}。`;
+      return role===0
+        ? `${c.evidence[0]}决定试点能否形成有效输入或按时启动，${changed?c.update+'使资源先后顺序需要更新。':'先补上最靠近任务结果的资源缺口。'}当前选择为${choice}。`
+        : `${c.evidence[1]||c.evidence[0]}决定资源组合能否按时运行，${changed?c.update+'提高了这一依赖的优先级。':'先检查预算、到位时间和跨资源依赖。'}当前选择为${choice}。`;
+    }
+    function multiAgentBody(c,arch,phase){
+      const v=multiView(c,phase), label=phase==='initial'?'初步选择':'更新后选择';
+      const r1=optionText(c,v.role1), r2=optionText(c,v.role2), rc=optionText(c,v.coord);
+      const reason1=multiReason(c,0,phase,r1), reason2=multiReason(c,1,phase,r2);
+      const nature=c.kind==='E'?'需求信号与实施条件的先后顺序不同':(c.kind==='S'?'路径收益与交付约束的权衡不同':'资源价值与到位依赖的顺序不同');
+      if(arch==='G3') return `<div class="ai-role"><div class="role-head">${roleNames[c.kind][0]}</div><p><strong>${label}：</strong>${r1} ${reason1}</p></div><div class="ai-role"><div class="role-head">${roleNames[c.kind][1]}</div><p><strong>${label}：</strong>${r2} ${reason2}</p></div><div class="ai-coordinator"><div class="role-head">协调者${phase==='initial'?'综合':'更新后的综合'}</div><p><strong>共同事实：</strong>${c.facts[0]}${phase==='update'?`；${c.update}`:''}</p><p><strong>分歧：</strong>${v.conflict} <strong>分歧性质：</strong>${nature}。</p><p><strong>综合选择：</strong>${rc}。协调者把两个角色的判断接到同一项行动上，并保留下一轮检查条件。</p></div>`;
+      return `<div class="ai-structured ai-role"><div class="role-head">${roleNames[c.kind][0]}</div><div><strong>依据</strong>${c.evidence[0]}${phase==='update'?`；${c.update}`:''}</div><div><strong>判断关系</strong>${reason1}</div><div><strong>${label}</strong>${r1}</div><div><strong>成立条件</strong>${c.kind==='E'?'外部信号持续且客户愿意转化。':c.kind==='S'?'路径能够获得反馈并承担交付责任。':'资源按预算和时间依赖到位。'}</div></div><div class="ai-structured ai-role"><div class="role-head">${roleNames[c.kind][1]}</div><div><strong>依据</strong>${c.evidence[1]||c.evidence[0]}${phase==='update'?`；${c.update}`:''}</div><div><strong>判断关系</strong>${reason2}</div><div><strong>${label}</strong>${r2}</div><div><strong>成立条件</strong>${c.kind==='E'?'数据、合规和交付条件能够确认。':c.kind==='S'?'关键约束可控且路径可以复制。':'前置资源先到位，后续资源能够接续。'}</div></div><div class="ai-coordinator"><div class="role-head">协调者${phase==='initial'?'综合':'更新与综合'}</div><p><strong>共同事实：</strong>${c.facts[0]}${phase==='update'?`；${c.update}`:''}</p><p><strong>分歧与性质：</strong>${v.conflict}这是${nature}。</p><p><strong>综合选择：</strong>${rc}。协调者说明两个角色如何接到同一项行动，并保留下一轮触发条件。</p></div>`;
+    }
+    function aiInitialMaterial(c,arch){
+      const showConfig=document.getElementById('showConfig').value==='yes';
+      const first=optionText(c,initialOptions[c.id]??0);
+      let body='';
+      if(arch==='G1') body=`<p>根据已知事实，${c.facts[0]}${c.facts[1]}${c.facts[2]}目前先关注${first}。这一步先确认最接近任务目标的信号、路径或资源，再结合后续信息调整。</p><div class="ai-conclusion">初步判断：先围绕${first}形成第一轮判断。</div>`;
+      else if(arch==='G2') body=`<div class="ai-structured"><div><strong>事实</strong>${factText(c)}。</div><div><strong>初步判断</strong>${first}最接近当前任务目标。</div><div><strong>判断关系</strong>${c.kind==='E'?'外部信号需要与企业业务关联起来。':c.kind==='S'?'路径选择取决于关键假设和行动后果。':'资源选择取决于预算、时序和前置依赖。'}</div><div><strong>下一步</strong>先围绕${first}形成判断，等待新增事实后再检查。</div></div>`;
+      else body=multiAgentBody(c,arch,'initial');
+      return `<div class="ai-card"><div class="ai-title"><span class="material-id">AI 初始分析材料 · 只读</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>${body}</div>`;
+    }
+
     function radioScale(name,labels=['非常不同意','不同意','一般','同意','非常同意']){
       return labels.map((x,i)=>`<label><input required type="radio" name="${name}" value="${i+1}">${i+1}</label>`).join('');
     }
@@ -354,6 +403,7 @@
           : `两份意见共同说明资源需要按依赖排序。${c.evidence[0]}应先处理，${c.evidence[1]||c.evidence[0]}再按里程碑配置；若${c.triggers[0]||'前置条件'}出现，暂停扩大投入。`;
         body=`<div class="ai-structured ai-role"><div class="role-head">${roles[0]}</div>${role1}</div><div class="ai-structured ai-role"><div class="role-head">${roles[1]}</div>${role2}</div><div class="ai-coordinator"><div class="role-head">协调者综合与更新</div><p><strong>共同点与差异：</strong>${synthesis}</p><p><strong>综合建议：</strong>优先${preferredText(c)}，并保留下一轮根据触发点修订的空间。</p></div>`;
       }
+      if(arch==='G3'||arch==='G4') body=multiAgentBody(c,arch,'update');
       const plainBody=body
         .replaceAll('还不能把当前反馈视为稳定需求','当前反馈值得继续验证，稳定需求要看付费和续约数据')
         .replaceAll('不能直接证明稳定需求','还要结合付费和续约数据判断稳定需求')
@@ -366,7 +416,8 @@
         .replaceAll('仍需通过小范围行动确认','可以通过小范围行动确认')
         .replaceAll('兴趣尚未转化为稳定需求','兴趣还需要用转化和续约数据确认')
         .replaceAll('可能推翻当前排序','会直接影响当前排序');
-      return `<div class="ai-card"><div class="ai-title"><span class="material-id">AI 分析材料 · 只读</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>${plainBody}${livedContext}</div>`;
+      const updateCard=`<div class="ai-card"><div class="ai-title"><span class="material-id">AI 更新分析材料 · 只读</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>${plainBody}${livedContext}</div>`;
+      return `${aiInitialMaterial(c,arch)}<div class="ai-stage ai-update-stage"><span class="stage-num">03</span><div><strong>新增信息｜请对照初始判断</strong><p>先阅读新增事实，再阅读 AI 如何更新原来的判断。</p></div></div>${updateCard}`;
     }
     const query = new URLSearchParams(location.search);
     const publicMode = query.get('public')==='1';
@@ -494,6 +545,8 @@
         .replaceAll('相关方与现实约束：','涉及的人和要考虑的条件：')
         .replaceAll('本轮判断的边界：','做决定时看什么：')
         .replaceAll('本题要判断：','这道题要回答：')
+        .replace('<p><strong>这道题要回答：</strong>','<p><strong>本题重点：</strong>'+focus(c)+'</p><p><strong>这道题要回答：</strong>')
+        .replace(/<p><strong>新出现的信息：<\/strong>[\s\S]*?<\/p>/,'')
         .replaceAll('一、AI 材料出现前：你的初始判断','一、先做你的判断')
         .replaceAll('请选择一个你认为最重要的选项，再填写判断概率和把握程度。','先选一项，再填写概率和把握程度。')
         .replaceAll('AI 介入环节｜请在这里阅读 AI 材料','AI 材料｜先阅读，再判断')
