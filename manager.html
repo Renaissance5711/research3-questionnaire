@@ -365,8 +365,8 @@
     function commonFactsBlock(c){
       return `<div class="ai-facts-shared"><div class="ai-facts-title">共同事实｜与案例卡片相同</div><ul>${c.facts.map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
     }
-    function sharedDecisionBlock(c){
-      return `<div class="ai-conclusion"><strong>共同落点：</strong>${detail(c,'decision')} 先${preferredText(c)}，下一轮重点核对${c.evidence[0]}。</div>`;
+    function sharedDecisionText(c){
+      return `${detail(c,'decision')} 先${preferredText(c)}，下一轮重点核对${c.evidence[0]}。`;
     }
     function manipulationChecks(c){
       const p=`${c.id}-ai-check`;
@@ -378,22 +378,22 @@
       const factsBlock=commonFactsBlock(c);
       let body='';
       if(arch==='G1'){
-        body=`<p><strong>整体判断：</strong>${c.evidence[0]}与${c.evidence[1]||c.evidence[0]}需要放在一起看。建议先${preferredText(c)}，再根据下一轮反馈决定是否扩大、调整或暂停。</p><p>放回当前经营现场，${detail(c,'human')} ${detail(c,'constraints')}</p>`;
+        body=`<p>${c.evidence[0]}与${c.evidence[1]||c.evidence[0]}需要放在一起看。建议先${preferredText(c)}，再根据下一轮反馈决定是否扩大、调整或暂停。</p><p>放回当前经营现场，${detail(c,'human')} ${detail(c,'constraints')}</p><p>${sharedDecisionText(c)}</p>`;
       }else if(arch==='G2'){
         const rel=`${c.evidence[0]}与${c.evidence[1]||c.evidence[0]}分别对应机会、路径或资源条件，需要同时核验。`;
-        body=`<div class="ai-structured"><div><strong>问题界定</strong>${c.goal}</div><div><strong>判断关系</strong>${rel}</div><div><strong>现实约束</strong>${detail(c,'constraints')}</div><div><strong>行动条件</strong>先${preferredText(c)}，再根据${c.evidence[0]}决定下一步。</div></div>`;
+        body=`<div class="ai-structured"><div><strong>问题界定</strong>${c.goal}</div><div><strong>判断关系</strong>${rel}</div><div><strong>现实约束</strong>${detail(c,'constraints')}</div><div><strong>行动条件</strong>先${preferredText(c)}，再根据${c.evidence[0]}决定下一步。</div><div><strong>综合结论</strong>${sharedDecisionText(c)}</div></div>`;
       }else if(arch==='G3'){
         const roles=roleNames[c.kind];
         const role1=`${c.evidence[0]}是第一位角色优先核验的条件，建议先${preferredText(c)}。`;
         const role2=`${c.evidence[1]||c.evidence[0]}是第二位角色关注的约束，需要继续观察其变化。`;
-        body=`<div class="ai-role"><div class="role-head">${roles[0]}</div><p>${role1}</p></div><div class="ai-role"><div class="role-head">${roles[1]}</div><p>${role2}</p></div><div class="ai-coordinator"><div class="role-head">协调者综合</div><p>两份意见分别关注${c.evidence[0]}和${c.evidence[1]||c.evidence[0]}，先${preferredText(c)}，再根据下一轮证据调整。</p><p>协调者把${detail(c,'decision')}拆成下一轮可检查的行动。</p></div>`;
+        body=`<div class="ai-role"><div class="role-head">${roles[0]}</div><p>${role1}</p></div><div class="ai-role"><div class="role-head">${roles[1]}</div><p>${role2}</p></div><div class="ai-coordinator"><div class="role-head">协调者综合</div><p>两份意见分别关注${c.evidence[0]}和${c.evidence[1]||c.evidence[0]}，先${preferredText(c)}，再根据下一轮证据调整。</p><p>把两份意见合并后，${sharedDecisionText(c)}</p></div>`;
       }else{
         const roles=roleNames[c.kind];
         const role1=`<div><strong>依据</strong>${c.evidence[0]}</div><div><strong>判断关系</strong>${c.evidence[0]}需要与其他事实一起解释。</div><div><strong>成立条件</strong>先${preferredText(c)}。</div>`;
         const role2=`<div><strong>依据</strong>${c.evidence[1]||c.evidence[0]}</div><div><strong>判断关系</strong>${c.evidence[1]||c.evidence[0]}决定后续行动能否成立。</div><div><strong>检查条件</strong>${c.triggers[0]||'下一轮反馈出现变化时重新判断。'}</div>`;
-        body=`<div class="ai-structured ai-role"><div class="role-head">${roles[0]}</div>${role1}</div><div class="ai-structured ai-role"><div class="role-head">${roles[1]}</div>${role2}</div><div class="ai-coordinator"><div class="role-head">协调者综合</div><p><strong>综合关系</strong>两个角色分别关注${c.evidence[0]}和${c.evidence[1]||c.evidence[0]}，先${preferredText(c)}，再按检查条件调整。</p></div>`;
+        body=`<div class="ai-structured ai-role"><div class="role-head">${roles[0]}</div>${role1}</div><div class="ai-structured ai-role"><div class="role-head">${roles[1]}</div>${role2}</div><div class="ai-coordinator"><div class="role-head">协调者综合</div><p><strong>综合关系</strong>两个角色分别关注${c.evidence[0]}和${c.evidence[1]||c.evidence[0]}，先${preferredText(c)}，再按检查条件调整。</p><p><strong>综合结论</strong>${sharedDecisionText(c)}</p></div>`;
       }
-      return `<div class="ai-card">${header}${factsBlock}${body}${sharedDecisionBlock(c)}</div>`;
+      return `<div class="ai-card">${header}${factsBlock}${body}</div>`;
     }
     const query = new URLSearchParams(location.search);
     const publicMode = query.get('public')==='1';
