@@ -156,6 +156,19 @@
       R2:{id:'R2',kind:'R',domain:'某通信服务企业',title:'边缘项目准备',horizon:'边缘项目试点准备期',context:'某通信服务企业准备启动工业互联网边缘项目。项目需要在客户试点窗口内完成准备，同时涉及现场工程、站点设备和数据安全审核，预算只能先补齐一项能力。',goal:'选择最先配置的资源，为项目取得许可、完成试点并通过客户验收创造条件。',facts:['客户试点窗口固定，现场工程师数量不足，跨区域调度成本较高。','边缘站点设备可以租赁，但交付和能源成本需要重新估算。','客户要求项目通过数据安全审核后才能扩大范围。'],update:'客户把低时延指标提高，并要求在试点前提交完整的数据安全责任清单。',options:['先配置工业解决方案和现场工程师','先锁定边缘站点和设备资源','先补齐数据安全与合规审核能力'],evidence:['现场交付能力是否支撑试点','站点与设备是否能按期满足低时延','安全审核是否决定项目能否继续'],triggers:['地方许可无法在 6 周内取得','客户低时延指标需要新增站点','数据安全审核发现高风险项']},
       R3:{id:'R3',kind:'R',domain:'某运动用品企业',title:'智能产品资源准备',horizon:'下一季产品准备期',context:'某运动用品企业准备扩大 AI 辅助产品项目。下一季产品准备周期和预算均已确定，公司需要在设计协同、柔性生产和渠道数据三类资源中确定先后顺序。',goal:'选择最先配置的资源，使新产品能够快速验证，并降低库存和材料波动带来的风险。',facts:['下一季产品准备周期和预算已经确定，设计团队已经开始使用生成式工具，但筛选与打磨流程尚未稳定。','小批量生产能力有限，材料交期有延长趋势。','渠道数据分散在不同平台，库存看板更新不够及时。'],update:'核心渠道要求把库存控制在安全线以内，供应商同时提示材料交期可能继续延长。',options:['先配置设计师与 AI 协同的筛选团队','先锁定小批量柔性生产能力','先打通线上线下渠道数据和库存看板'],evidence:['设计筛选能否形成稳定的产品输入','柔性生产是否能承受材料交期波动','库存和渠道数据是否能支持补货判断'],triggers:['材料交期继续延长','设计概念通过率低于预期','渠道库存连续两周高于安全线']}
     };
+    /* 正式题面使用短而直接的行动句，避免受访者在选项中猜测题意。 */
+    const directCaseText={
+      E1:{goal:'未来 12 个月，哪项信号最值得先看，才能判断 AI 运维能否形成付费市场？',options:['看客户是否愿意付费和续约','看客户是否接受本地部署和数据合规','看边缘算力的交付和成本','看竞品效果是否改变客户预期']},
+      E2:{goal:'未来 12 个月，哪项信号最能说明工业互联网机会会变成稳定订单？',options:['看地方采购何时启动','看客户是否把低时延和本地处理写进项目要求','看站点成本和利用率能否支撑回报','看竞争价格是否改变客户选择']},
+      E3:{goal:'未来 12 个月，哪项信号最能说明智能产品值得扩大投入？',options:['看用户是否从点击转为购买','看赛事和季节是否带来持续需求','看材料和小批量生产能否跟上','看竞品折扣和渠道库存变化']},
+      S1:{goal:'未来 12 个月，哪条路径最适合先验证 AI 运维服务化？',options:['嵌入现有服务，先做小范围试点','做独立 SaaS，先服务标准化客户','和两家重点客户共同开发方案']},
+      S2:{goal:'未来 12 个月，哪条路径最适合先做出示范项目并复制？',options:['总部统一建设平台，直接全国扩张','与本地伙伴共同交付','先在两个省做小规模试点']},
+      S3:{goal:'未来 12 个月，哪条路径最适合同时验证产品价值和经营回报？',options:['先做小批量迭代，再按反馈扩展','先做高端 AI 设计系列','先做渠道预测和库存优化']},
+      R1:{goal:'试点开始前，哪项资源最应该先配置？',options:['先补数据标注和数据工程','先锁定边缘 GPU 和算力预算','先配客户集成与现场服务']},
+      R2:{goal:'项目启动前，哪项资源最应该先配置？',options:['先配现场工程和交付人员','先锁定边缘站点与设备','先补数据安全与合规审核']},
+      R3:{goal:'下一季产品准备中，哪项资源最应该先配置？',options:['先组建设计师与 AI 协同筛选团队','先锁定小批量柔性生产','先打通渠道数据和库存看板']}
+    };
+    Object.entries(directCaseText).forEach(([id,text])=>Object.assign(cases[id],text));
     /*
       四种材料严格对应研究二、研究三的 2×2 设计：
       G1 基础单体；G2 结构化单体；G3 基础多体；G4 结构化多体。
@@ -244,6 +257,18 @@
         human:'如果产品还没有稳定的筛选标准，扩大设计产出可能只会增加返工；如果库存数据不可靠，生产和补货也会被动。先做哪一项，要看它能否让后续决策变得更可靠。'
       }
     };
+    const directDetailText={
+      E1:{constraints:'现在有两家客户在试点，市场样本还需继续积累；边缘算力、数据授权和服务人员要提前排好。',decision:'团队要同时看客户需求与交付条件：客户愿意付费、数据权限清晰、服务成本可控，才是扩大投入的判断依据。',human:'这家公司先要确认客户愿不愿意为结果付费，再把数据权限、验收责任和续约条款谈清楚。'},
+      E2:{constraints:'各地采购节奏不同，客户指标口径也不同；全国配置会带来站点闲置和现金流压力。',decision:'团队要把市场信号和项目经济性放在一起看，重点判断哪些变化会真正带来订单和回报。',human:'这类机会的判断重点是客户能立项、能验收、能持续付费，而不只是表达兴趣。'},
+      E3:{constraints:'首轮产品的转化和补货信号分化；平台数据、材料交期和小批量产能决定试错速度。',decision:'团队要把点击、购买、渠道补货和稳定生产串成一条证据链，判断机会是否进入扩大投入阶段。',human:'判断要把用户点击、实际转化、渠道补货和稳定生产放在一条证据链上。'},
+      S1:{constraints:'客户意愿、数据工程能力和试点周期共同决定路径推进速度；路径选择会影响现有客户关系。',decision:'优先选择能快速获得真实反馈、又能保留后续调整空间的路径。',human:'路径选择要看每条路先承担什么责任、能拿到什么证据，以及后续能否灵活调整。'},
+      S2:{constraints:'一个省份采购延期，另一个省份开放小试点；投入要随证据逐步增加。',decision:'优先选择能用小项目验证客户需求、伙伴交付和技术指标的路径。',human:'更稳妥的路径是用边界清楚的小项目，把平台、伙伴和客户验收标准先接起来。'},
+      S3:{constraints:'市场关注度上升，但材料交期和渠道库存要求同时收紧；产品、品牌、渠道都要看。',decision:'优先选择能同时带来产品反馈和经营数据、且投入节奏可控的路径。',human:'好的路径先让团队看清产品、品牌和渠道哪个环节成立，再逐步增加投入。'},
+      R1:{constraints:'客户数据权限、GPU 交期和固定准备周期决定资源顺序；资源锁定后短期调整成本较高。',decision:'先找出会卡住试点上线的前置资源，再安排后续资源。',human:'资源顺序要先拆开依赖关系：数据、算力和接口验收哪一项最先卡住，哪一项就先处理。'},
+      R2:{constraints:'试点窗口固定，现场人手、设备成本和安全审核共同决定项目是否放行。',decision:'先配置能让项目获得放行、按期实施并通过验收的资源。',human:'资源顺序要围绕客户放行和项目验收来排，也要提前说清谁负责、谁证明、谁承担后果。'},
+      R3:{constraints:'设计筛选标准、材料交期和分散的渠道数据共同影响下一季产品节奏。',decision:'先配置能减少下一季判断误差、让后续设计和生产更顺畅的资源。',human:'先把筛选标准、生产节奏和库存数据中最影响下一步的那一项理顺，后面的设计和补货判断才会更可靠。'}
+    };
+    Object.entries(directDetailText).forEach(([id,text])=>Object.assign(caseDetails[id],text));
     function detail(c,key){return (caseDetails[c.id]&&caseDetails[c.id][key])||''}
     function optionText(c,index){return `${String.fromCharCode(65+index)}．${c.options[index]}`}
     function preferredText(c){return (preferredOptions[c.id]||[0]).map(i=>optionText(c,i)).join('；')}
@@ -274,7 +299,7 @@
       const showConfig=document.getElementById('showConfig').value==='yes';
       const header=`<div class="ai-title"><span class="material-id">AI 分析材料 · 只读</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>`;
       const update=`<span class="ai-inline-update">新增信息：${c.update}</span>`;
-      const livedContext=`<div class="ai-human-note"><strong>放回经营现场：</strong>${detail(c,'human')} <strong>还要同时核对：</strong>${detail(c,'stakeholders')} ${detail(c,'constraints')} <strong>这意味着：</strong>AI 给出的方向只能作为下一轮讨论的起点，团队仍需把客户是否愿意承担、资源是否按期到位以及谁来负责验收说清楚，再决定继续、调整还是暂停投入。</div>`;
+      const livedContext=`<div class="ai-human-note"><strong>放回经营现场：</strong>${detail(c,'human')} <strong>还要同时核对：</strong>${detail(c,'stakeholders')} ${detail(c,'constraints')} <strong>接下来：</strong>团队把客户承担意愿、资源到位时间和验收责任说清楚，再决定继续、调整还是暂停投入。</div>`;
       let body='';
       if(arch==='G1'){
         if(c.kind==='E') body=`<p>综合来看，${c.facts[0]}${c.facts[1]}${c.facts[2]}这些信息说明机会值得继续验证，但还不能把当前反馈视为稳定需求。${update}建议${preferredText(c)}，先保持小范围观察，再根据${c.evidence[1]||c.evidence[0]}是否持续变化决定是否扩大投入。</p><div class="ai-conclusion">当前判断：先保留验证空间，把需求信号与实施约束放在同一轮观察中。</div>`;
@@ -329,7 +354,19 @@
           : `两份意见共同说明资源需要按依赖排序。${c.evidence[0]}应先处理，${c.evidence[1]||c.evidence[0]}再按里程碑配置；若${c.triggers[0]||'前置条件'}出现，暂停扩大投入。`;
         body=`<div class="ai-structured ai-role"><div class="role-head">${roles[0]}</div>${role1}</div><div class="ai-structured ai-role"><div class="role-head">${roles[1]}</div>${role2}</div><div class="ai-coordinator"><div class="role-head">协调者综合与更新</div><p><strong>共同点与差异：</strong>${synthesis}</p><p><strong>综合建议：</strong>优先${preferredText(c)}，并保留下一轮根据触发点修订的空间。</p></div>`;
       }
-      return `<div class="ai-card"><div class="ai-title"><span class="material-id">AI 分析材料 · 只读</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>${body}${livedContext}</div>`;
+      const plainBody=body
+        .replaceAll('还不能把当前反馈视为稳定需求','当前反馈值得继续验证，稳定需求要看付费和续约数据')
+        .replaceAll('不能直接证明稳定需求','还要结合付费和续约数据判断稳定需求')
+        .replaceAll('尚不足以证明稳定需求','还需要用付费和续约数据确认稳定需求')
+        .replaceAll('不能在前置条件未确认时一次性投入','先确认前置条件，再分阶段投入')
+        .replaceAll('不能只按局部效率决定','要按资源依赖和试点节奏决定')
+        .replaceAll('当前不宜把单一正面反馈理解为稳定需求','单一正面反馈要和转化、续约数据一起看')
+        .replaceAll('不能只看方案收益','要把方案收益和交付条件一起看')
+        .replaceAll('因此需要重新检查原有排序或投入边界','因此要重新检查原有排序和投入边界')
+        .replaceAll('仍需通过小范围行动确认','可以通过小范围行动确认')
+        .replaceAll('兴趣尚未转化为稳定需求','兴趣还需要用转化和续约数据确认')
+        .replaceAll('可能推翻当前排序','会直接影响当前排序');
+      return `<div class="ai-card"><div class="ai-title"><span class="material-id">AI 分析材料 · 只读</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>${plainBody}${livedContext}</div>`;
     }
     const query = new URLSearchParams(location.search);
     const publicMode = query.get('public')==='1';
@@ -391,13 +428,13 @@
     }
     function confidence(name){return `<div class="rating">${[1,2,3,4,5,6,7].map(v=>`<label><input required type="radio" name="${name}" value="${v}">${v}</label>`).join('')}</div><div class="helper">1 = 完全没有把握；7 = 非常有把握</div>`}
     function mainVoteBlock(c,member){
-      const title={E:'本轮最优先跟踪的信号',S:'下一阶段采用的路径',R:'最先配置的资源'}[c.kind];
+      const title={E:'第一步先看什么',S:'下一阶段走哪条路径',R:'第一步配什么资源'}[c.kind];
       const label=memberView?`你的最终投票：${title}`:`成员${member}：${title}`;
       const choicesHtml=c.options.map((x,i)=>`<label class="choice"><input required type="radio" name="${c.id}-vote-${member}" data-vote-main="${c.id}" data-vote-member="${member}" value="${i+1}"><span>${String.fromCharCode(65+i)}．${x}</span></label>`).join('');
       return `<div class="vote-member"><div class="vote-label">${label} *</div><div class="choice-list">${choicesHtml}</div></div>`;
     }
     function teamFields(c){
-      const title={E:'最优先跟踪的信号',S:'下一阶段采用的路径',R:'最先配置的资源'}[c.kind];
+      const title={E:'第一步先看什么',S:'下一阶段走哪条路径',R:'第一步配什么资源'}[c.kind];
       const members=teamView?[]:(memberView?[memberView]:[1,2,3]);
       const req=memberView?'':'required';
       let rationale='';
@@ -451,6 +488,27 @@
       const teamRule=teamView?'三位成员的主决策由系统按多数规则生成；本页面只记录团队讨论后的补充信息。':(memberView?'本部分只记录你的个人最终投票，不代表你代替其他成员作答；后台会按公司归组，在三位成员都提交后生成团队答案。':'所有成员先独立判断并阅读同一份 AI 分析材料；团队讨论后，三位成员分别提交一个最终选择。第一轮获得至少 2 票的选项形成团队答案；若没有选项获得 2 票，进入第二轮多数表决。这里记录的是团队最终采取的方案，不是个人答案的平均值。');
       return `<article class="task" data-task="${c.id}"><div class="task-head"><div><div class="task-no">TASK 0${index+1} · ${kindName}</div><div class="task-title">${c.domain}｜${c.title}</div></div><div class="task-type">${c.id} · 固定情景</div></div><div class="task-body"><div class="case-meta"><span class="tag">先导任务：${kindName}</span><span class="tag">判断周期：${c.horizon||'未来 12 个月'}</span><span class="tag">先独立作答</span></div><div class="case-text"><p><strong>情景：</strong>${c.context}</p><p><strong>经营背景：</strong>${detail(c,'background')}</p><p><strong>相关方与现实约束：</strong>${detail(c,'stakeholders')} ${detail(c,'constraints')}</p><p><strong>本轮判断的边界：</strong>${detail(c,'decision')}</p><p><strong>本题要判断：</strong>${c.goal}</p><p><strong>已知信息：</strong></p><ul class="fact-list">${c.facts.map(x=>`<li>${x}</li>`).join('')}</ul><p><strong>新出现的信息：</strong>${c.update}</p></div><div class="choice-box"><h4>一、AI 材料出现前：你的初始判断</h4><p class="helper">请选择一个你认为最重要的选项，再填写判断概率和把握程度。</p><div class="choice-list">${choices(c,'initial')}</div><label class="field">你认为所选主判断最终成立的概率（0—100%） *<input required type="number" min="0" max="100" name="${c.id}-initial-prob" placeholder="例如：65"><div class="helper">0 表示几乎不可能；100 表示几乎确定。</div></label><div style="margin-top:11px"><span class="field">你对初始判断的把握程度 *${confidence(c.id+'-initial-confidence')}</span></div></div><div class="ai-stage"><span class="stage-num">02</span><div><strong>AI 介入环节｜请在这里阅读 AI 材料</strong><p>以下灰色信息框是系统分配给本团队的人工智能分析结果。三位成员看到相同内容；这里只需阅读，不需要填写。</p></div></div>${aiMaterial(c,arch)}<div class="after-ai">阅读完成后，请继续回答最终判断</div><div class="choice-box"><h4>三、阅读 AI 材料后：你的最终判断</h4><p class="helper">可以维持初始判断，也可以根据材料调整。</p><div class="choice-list">${choices(c,'final')}</div><label class="field">你认为所选主判断最终成立的概率（0—100%） *<input required type="number" min="0" max="100" name="${c.id}-final-prob" placeholder="例如：70"><div class="helper">0 表示几乎不可能；100 表示几乎确定。</div></label><div style="margin-top:11px"><span class="field">你对最终判断的把握程度 *${confidence(c.id+'-final-confidence')}</span></div><label class="field" style="margin-top:13px">AI 材料对你最终判断的影响程度 *<select required name="${c.id}-ai-influence"><option value="">请选择</option><option>1．几乎没有影响</option><option>2．影响较小</option><option>3．中等影响</option><option>4．影响较大</option><option>5．影响很大</option></select></label></div><div class="team-box"><h4>${teamTitle}</h4><div class="team-rule"><strong>固定决策规则：</strong>${teamRule}</div><p class="helper">${teamInstruction}</p>${teamFields(c)}</div></div></article>`;
     }
+    const baseRenderTask=renderTask;
+    renderTask=function(c,index,arch){
+      return baseRenderTask(c,index,arch)
+        .replaceAll('相关方与现实约束：','涉及的人和要考虑的条件：')
+        .replaceAll('本轮判断的边界：','做决定时看什么：')
+        .replaceAll('本题要判断：','这道题要回答：')
+        .replaceAll('一、AI 材料出现前：你的初始判断','一、先做你的判断')
+        .replaceAll('请选择一个你认为最重要的选项，再填写判断概率和把握程度。','先选一项，再填写概率和把握程度。')
+        .replaceAll('AI 介入环节｜请在这里阅读 AI 材料','AI 材料｜先阅读，再判断')
+        .replaceAll('三、阅读 AI 材料后：你的最终判断','三、看完 AI 材料，再做一次判断')
+        .replaceAll('可以维持初始判断，也可以根据材料调整。','可以保留原判断，也可以根据材料换一项。')
+        .replaceAll('你认为所选主判断最终成立的概率','你判断这项选择最终成立的概率')
+        .replaceAll('你对初始判断的把握程度','你对这个判断的把握程度')
+        .replaceAll('你对最终判断的把握程度','你对这个判断的把握程度')
+        .replaceAll('AI 材料对你最终判断的影响程度','AI 材料对你选择的影响程度')
+        .replaceAll('尚未','目前还没有')
+        .replaceAll('仍然分化','目前还不一致')
+        .replaceAll('预算只能优先支持','预算先支持')
+        .replaceAll('预算只能先补齐','预算先补齐')
+        .replaceAll('本部分只记录你的个人最终投票，不代表你代替其他成员作答；后台会按公司归组，在三位成员都提交后生成团队答案。','这里提交你的个人最终投票，后台会按公司归组，在三位成员完成后生成团队答案。');
+    };
     function applyBackendAssignment(){
       const backendValues={team_id:query.get('team')||'',member_id:query.get('memberId')||'',architecture_id:query.get('archId')||query.get('arch')||''};
       Object.entries(backendValues).forEach(([name,value])=>{const el=document.querySelector(`[name="${name}"]`);if(el&&value) el.value=value;});
