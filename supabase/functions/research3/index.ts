@@ -42,6 +42,45 @@ function pick<T>(values: readonly T[]) {
   return values[Math.floor(Math.random() * values.length)];
 }
 
+function chooseLeast<T>(values: readonly T[], counts: Map<T, number>) {
+  const minimum = Math.min(...values.map((value) => counts.get(value) ?? 0));
+  return pick(values.filter((value) => (counts.get(value) ?? 0) === minimum));
+}
+
+async function selectBalanced(db: ReturnType<typeof client>) {
+  const existing = await db.from("research3_teams").select("architecture_id,pair,case_e,case_s,case_r");
+  if (existing.error) throw existing.error;
+  const rows = existing.data ?? [];
+  const architectureCounts = new Map(ARCHITECTURES.map((value) => [value, 0]));
+  for (const row of rows) architectureCounts.set(row.architecture_id, (architectureCounts.get(row.architecture_id) ?? 0) + 1);
+  const architecture_id = chooseLeast(ARCHITECTURES, architectureCounts);
+
+  const pairCounts = new Map(PAIRS.map((value) => [value, 0]));
+  for (const row of rows.filter((value) => value.architecture_id === architecture_id)) pairCounts.set(row.pair, (pairCounts.get(row.pair) ?? 0) + 1);
+  const pair = chooseLeast(PAIRS, pairCounts);
+  const scopedRows = rows.filter((value) => value.architecture_id === architecture_id && value.pair === pair);
+  const caseFor = (kind: keyof typeof CASES, column: "case_e" | "case_s" | "case_r") => {
+    const counts = new Map(CASES[kind].map((value) => [value, 0]));
+    for (const row of scopedRows) counts.set(row[column], (counts.get(row[column]) ?? 0) + 1);
+    return chooseLeast(CASES[kind], counts);
+  };
+  return { architecture_id, pair, case_e: caseFor("E", "case_e"), case_s: caseFor("S", "case_s"), case_r: caseFor("R", "case_r") };
+}
+
+function majorityDecision(votes: number[]) {
+  const counts = new Map<number, number>();
+  for (const vote of votes) counts.set(vote, (counts.get(vote) ?? 0) + 1);
+  const max = counts.size ? Math.max(...counts.values()) : 0;
+  const candidates = [...counts.entries()].filter(([, count]) => count === max).map(([vote]) => vote).sort((a, b) => a - b);
+  return {
+    votes,
+    winner: max >= 2 && candidates.length ? candidates[0] : null,
+    vote_count: max,
+    status: max >= 2 ? "majority" : (votes.length >= 3 ? "runoff_required" : "incomplete"),
+    runoff_candidates: max >= 2 ? [] : candidates,
+  };
+}
+
 function factors(architecture: string) {
   return {
     structure_factor: Number(architecture === "G2" || architecture === "G4"),
@@ -83,7 +122,8 @@ async function assignment(company: unknown) {
   if (existing.error) throw existing.error;
   if (existing.data) return publicAssignment(existing.data);
 
-  const architecture_id = pick(ARCHITECTURES);
+  const balanced = await selectBalanced(db);
+  const architecture_id = balanced.architecture_id;
   const { structure_factor, division_factor } = factors(architecture_id);
   const row = {
     team_id: teamId,
@@ -91,10 +131,10 @@ async function assignment(company: unknown) {
     architecture_id,
     structure_factor,
     division_factor,
-    pair: pick(PAIRS),
-    case_e: pick(CASES.E),
-    case_s: pick(CASES.S),
-    case_r: pick(CASES.R),
+    pair: balanced.pair,
+    case_e: balanced.case_e,
+    case_s: balanced.case_s,
+    case_r: balanced.case_r,
   };
   const inserted = await db.from("research3_teams").insert(row).select("*").single();
   // Two people can enter the same company at almost the same time. In that
@@ -136,12 +176,43 @@ async function submit(body: JsonObject) {
   if (team.error) throw team.error;
   if (!team.data) throw new Error("unknown team assignment");
   const payload = cleanPayload(body.payload);
+  const previous = await db.from("research3_submissions").select("submission_id").eq("team_id", teamId).eq("member_slot", memberSlot).maybeSingle();
+  if (previous.error) throw previous.error;
   const result = await db.from("research3_submissions")
     .upsert({ team_id: teamId, member_slot: memberSlot, role: String(body.role ?? payload.role ?? ""), payload }, { onConflict: "team_id,member_slot" })
     .select("submission_id,team_id")
     .single();
   if (result.error) throw result.error;
-  return result.data;
+  return { ...result.data, overwritten: Boolean(previous.data), write_status: previous.data ? "updated" : "created" };
+}
+
+function assignedTasks(team: JsonObject) {
+  const tasks: Array<{ task: string; case_id: string }> = [];
+  if (String(team.pair).includes("E")) tasks.push({ task: "E", case_id: String(team.case_e) });
+  if (String(team.pair).includes("S")) tasks.push({ task: "S", case_id: String(team.case_s) });
+  if (String(team.pair).includes("R")) tasks.push({ task: "R", case_id: String(team.case_r) });
+  return tasks;
+}
+
+function submittedVote(payload: JsonObject, caseId: string, memberSlot: string) {
+  const direct = payload[`${caseId}-vote-main-${memberSlot}`];
+  const legacy = payload[`${caseId}-vote-main`];
+  const value = direct ?? legacy;
+  const match = String(value ?? "").match(/^\s*(\d+)/);
+  return match ? Number(match[1]) : null;
+}
+
+function teamDecision(team: JsonObject, submissions: JsonObject[]) {
+  const teamRows = submissions.filter((row) => row.team_id === team.team_id);
+  const memberSlots = [...new Set(teamRows.map((row) => String(row.member_slot)))].sort();
+  const decisions: JsonObject[] = [];
+  for (const assigned of assignedTasks(team)) {
+    const votes = teamRows
+      .map((row) => submittedVote((row.payload ?? {}) as JsonObject, assigned.case_id, String(row.member_slot)))
+      .filter((value): value is number => value !== null);
+    decisions.push({ task: assigned.task, case_id: assigned.case_id, ...majorityDecision(votes) });
+  }
+  return { team_id: team.team_id, architecture_id: team.architecture_id, pair: team.pair, member_slots: memberSlots, members_submitted: memberSlots.length, complete: memberSlots.length >= 3, decisions };
 }
 
 function numericValues(rows: JsonObject[], suffix: string) {
@@ -172,11 +243,13 @@ async function aggregate() {
   const submissions = submissionsResult.data ?? [];
   const byTeam = new Map(teams.map((team) => [team.team_id, team]));
   const rows = submissions.map((s) => ({ ...s, architecture_id: byTeam.get(s.team_id)?.architecture_id } as JsonObject));
-  const completedTeams = teams.filter((team) => submissions.filter((s) => s.team_id === team.team_id).map((s) => s.member_slot).filter((v, i, a) => a.indexOf(v) === i).length >= 3).length;
+  const teamDecisions = teams.map((team) => teamDecision(team as JsonObject, submissions as JsonObject[]));
+  const completedTeams = teamDecisions.filter((team) => team.complete).length;
   const byArchitecture = ARCHITECTURES.map((architecture_id) => {
     const archTeams = teams.filter((t) => t.architecture_id === architecture_id);
     const archRows = rows.filter((r) => r.architecture_id === architecture_id);
-    return { architecture_id, teams: archTeams.length, submissions: archRows.length, mean_final_probability: mean(numericValues(archRows, "-final-prob")), mean_ai_influence: mean(numericValues(archRows, "-ai-influence")) };
+    const archDecisions = teamDecisions.filter((team) => team.architecture_id === architecture_id);
+    return { architecture_id, teams: archTeams.length, completed_teams: archDecisions.filter((team) => team.complete).length, submissions: archRows.length, mean_final_probability: mean(numericValues(archRows, "-final-prob")), mean_ai_influence: mean(numericValues(archRows, "-ai-influence")) };
   });
   const byPair = PAIRS.map((pair) => ({ pair, teams: teams.filter((t) => t.pair === pair).length })).filter((row) => row.teams > 0);
   const byCase: JsonObject[] = [];
@@ -198,7 +271,7 @@ async function aggregate() {
     }
     if (probabilities.length) byTask.push({ task, architecture_id, submissions: probabilities.length, mean_final_probability: mean(probabilities) });
   }
-  return { generated_at: new Date().toISOString(), teams_total: teams.length, submissions_total: submissions.length, completed_teams: completedTeams, by_architecture: byArchitecture, by_pair: byPair, by_case: byCase, by_task: byTask };
+  return { generated_at: new Date().toISOString(), teams_total: teams.length, submissions_total: submissions.length, completed_teams: completedTeams, by_architecture: byArchitecture, by_pair: byPair, by_case: byCase, by_task: byTask, team_decisions: teamDecisions };
 }
 
 function authorized(req: Request, url: URL) {
