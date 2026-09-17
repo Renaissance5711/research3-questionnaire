@@ -326,16 +326,6 @@
       if(arch==='G3') return `<div class="ai-role"><div class="role-head">${roleNames[c.kind][0]}</div><p><strong>${label}：</strong>${r1} ${reason1}</p></div><div class="ai-role"><div class="role-head">${roleNames[c.kind][1]}</div><p><strong>${label}：</strong>${r2} ${reason2}</p></div><div class="ai-coordinator"><div class="role-head">协调者综合</div><p><strong>共同事实：</strong>${c.facts[0]}</p><p><strong>分歧：</strong>${v.conflict} <strong>分歧性质：</strong>${nature}。</p><p><strong>综合选择：</strong>${rc}。协调者把两个角色的判断接到同一项行动上，并保留下一轮检查条件。</p></div>`;
       return `<div class="ai-structured ai-role"><div class="role-head">${roleNames[c.kind][0]}</div><div><strong>依据</strong>${c.evidence[0]}</div><div><strong>判断关系</strong>${reason1}</div><div><strong>${label}</strong>${r1}</div><div><strong>成立条件</strong>${c.kind==='E'?'外部信号持续且客户愿意转化。':c.kind==='S'?'路径能够获得反馈并承担交付责任。':'资源按预算和时间依赖到位。'}</div></div><div class="ai-structured ai-role"><div class="role-head">${roleNames[c.kind][1]}</div><div><strong>依据</strong>${c.evidence[1]||c.evidence[0]}</div><div><strong>判断关系</strong>${reason2}</div><div><strong>${label}</strong>${r2}</div><div><strong>成立条件</strong>${c.kind==='E'?'数据、合规和交付条件能够确认。':c.kind==='S'?'关键约束可控且路径可以复制。':'前置资源先到位，后续资源能够接续。'}</div></div><div class="ai-coordinator"><div class="role-head">协调者综合</div><p><strong>共同事实：</strong>${c.facts[0]}</p><p><strong>分歧与性质：</strong>${v.conflict}这是${nature}。</p><p><strong>综合选择：</strong>${rc}。协调者说明两个角色如何接到同一项行动，并保留下一轮触发条件。</p></div>`;
     }
-    function aiInitialMaterial(c,arch){
-      const showConfig=document.getElementById('showConfig').value==='yes';
-      const first=optionText(c,initialOptions[c.id]??0);
-      let body='';
-      if(arch==='G1') body=`<p>根据已知事实，${c.facts[0]}${c.facts[1]}${c.facts[2]}目前先关注${first}。这一步先确认最接近任务目标的信号、路径或资源，再结合后续信息调整。</p><div class="ai-conclusion">初步判断：先围绕${first}形成第一轮判断。</div>`;
-      else if(arch==='G2') body=`<div class="ai-structured"><div><strong>事实</strong>${factText(c)}。</div><div><strong>初步判断</strong>${first}最接近当前任务目标。</div><div><strong>判断关系</strong>${c.kind==='E'?'外部信号需要与企业业务关联起来。':c.kind==='S'?'路径选择取决于关键假设和行动后果。':'资源选择取决于预算、时序和前置依赖。'}</div><div><strong>下一步</strong>先围绕${first}形成判断，等待新增事实后再检查。</div></div>`;
-      else body=multiAgentBody(c,arch,'initial');
-      return `<div class="ai-card"><div class="ai-title"><span class="material-id">AI 初始分析材料 · 只读</span>${showConfig?`<span class="config-chip">研究者预览：${arch} · ${archNames[arch]}</span>`:''}</div>${body}</div>`;
-    }
-
     function radioScale(name,labels=['非常不同意','不同意','一般','同意','非常同意']){
       return labels.map((x,i)=>`<label><input required type="radio" name="${name}" value="${i+1}">${i+1}</label>`).join('');
     }
