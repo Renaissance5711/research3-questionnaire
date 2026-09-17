@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>研究三｜统计后台</title>
+  <style>
+    body{margin:0;background:#f5f5f2;color:#17232d;font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6}
+    .wrap{max-width:1100px;margin:0 auto;padding:32px 20px 70px}h1{font-family:Georgia,"Songti SC",serif;margin:0 0 6px}.muted{color:#65717a;font-size:13px}.toolbar{display:flex;gap:10px;align-items:center;margin:18px 0;flex-wrap:wrap}input,button{font:inherit;padding:9px 12px;border:1px solid #ccd3d6;border-radius:4px;background:#fff}button{background:#263640;color:#fff;border-color:#263640;cursor:pointer}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}.card,section{background:#fff;border:1px solid #d8dde0;padding:16px}.card strong{display:block;font-size:27px;color:#263640}section{margin:18px 0}h2{font-size:18px;margin:0 0 10px}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px 10px;border-bottom:1px solid #e3e6e7;text-align:left}th{background:#eef1f2;color:#47565f}.status{padding:10px 12px;background:#eef6f0;color:#254a31;border-left:3px solid #4d8058}.error{background:#f7e9e7;color:#6f2e27;border-left-color:#9a3a2f}@media(max-width:760px){.cards{grid-template-columns:repeat(2,1fr)}table{font-size:12px}}
+  </style>
+</head>
+<body><main class="wrap">
+  <h1>研究三统计后台</h1>
+  <div class="muted">只显示汇总信息；公司名称不保存、不显示。正式部署时请把访问权限交给研究者。</div>
+  <div class="toolbar"><label>后台口令 <input id="token" type="password" placeholder="请输入研究者口令"></label><button id="refresh">刷新统计</button><button id="export">导出匿名数据</button></div>
+  <div id="status" class="status">等待读取统计数据。</div>
+  <div id="cards" class="cards"></div>
+  <section><h2>四种 AI 架构分配</h2><div id="arch"></div></section>
+  <section><h2>判断指标（成员层面均值）</h2><div id="metrics"></div><div class="muted">最终判断概率为 0—100；AI 影响程度为 1—5。正式分析时仍需按预先冻结的团队聚合规则处理。</div></section>
+  <section><h2>任务组合</h2><div id="pair"></div></section>
+  <section><h2>案例版本分配</h2><div id="cases"></div></section>
+  <script>
+    const tokenKey='research3_admin_token';
+    const query=new URLSearchParams(location.search);
+    const apiBase=(query.get('api')||'').replace(/\/$/,'');
+    const supabaseFunctionApi=/\/functions\/v1\/research3(?:$|[?#])/.test(apiBase);
+    function apiUrl(action, params={}){
+      const localBase=apiBase.endsWith('/api')?apiBase:`${apiBase||''}/api`;
+      const url=new URL(supabaseFunctionApi?apiBase:`${localBase}/${action}`,location.href);
+      if(supabaseFunctionApi) url.searchParams.set('action',action);
+      Object.entries(params).forEach(([key,value])=>url.searchParams.set(key,String(value)));
+      return url.toString();
+    }
+    document.getElementById('token').value=localStorage.getItem(tokenKey)||'';
+    function table(headers,rows){return `<table><thead><tr>${headers.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table>`}
+    async function load(){
+      const token=document.getElementById('token').value.trim(); localStorage.setItem(tokenKey,token);
+      const status=document.getElementById('status'); status.className='status'; status.textContent='正在读取…';
+      try{
+        const res=await fetch(apiUrl('stats'),{headers:{'X-Admin-Token':token}}); const data=await res.json();
+        if(!res.ok||!data.ok) throw new Error(data.error||'读取失败');
+        document.getElementById('cards').innerHTML=[['团队总数',data.teams_total],['成员提交数',data.submissions_total],['完成三人团队',data.completed_teams],['生成时间',data.generated_at]].map(x=>`<div class="card"><span class="muted">${x[0]}</span><strong>${x[1]}</strong></div>`).join('');
+        document.getElementById('arch').innerHTML=table(['架构','团队数','成员提交数','最终概率均值','AI影响均值'],data.by_architecture.map(x=>[x.architecture_id,x.teams,x.submissions,x.mean_final_probability??'—',x.mean_ai_influence??'—']));
+        document.getElementById('metrics').innerHTML=table(['任务','架构','提交数','最终判断概率均值'],data.by_task.map(x=>[x.task,x.architecture_id,x.submissions,x.mean_final_probability]));
+        document.getElementById('pair').innerHTML=table(['任务组合','团队数'],data.by_pair.map(x=>[x.pair,x.teams]));
+        document.getElementById('cases').innerHTML=table(['任务','案例','团队数'],data.by_case.map(x=>[x.kind,x.case_id,x.teams]));
+        status.textContent='统计已更新。';
+      }catch(e){status.className='status error';status.textContent=e.message}
+    }
+    document.getElementById('refresh').addEventListener('click',load);
+    document.getElementById('export').addEventListener('click',async()=>{const token=document.getElementById('token').value.trim();const res=await fetch(apiUrl('export'),{headers:{'X-Admin-Token':token}});if(!res.ok){alert('导出失败');return}const blob=await res.blob();const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='研究三匿名数据.json';a.click();URL.revokeObjectURL(a.href)});
+    load();
+  </script>
+</main></body></html>
