@@ -403,6 +403,7 @@
     function stableHash(text){let h=0; for(let i=0;i<text.length;i++) h=((h<<5)-h+text.charCodeAt(i))|0; return Math.abs(h)}
     function normalizeCompany(value){return String(value||'').replace(/[\s　]+/g,'').replace(/[（(].*?[）)]/g,'').replace(/有限公司|有限责任公司|股份有限公司|集团公司|集团$/g,'').toLowerCase()}
     const apiBase=(query.get('api')||'').replace(/\/$/,'');
+    const defaultResearch3Api='https://ychjqaunrexahsjjecnv.supabase.co/functions/v1/research3';
     const supabaseFunctionApi=/\/functions\/v1\/research3(?:$|[?#])/.test(apiBase);
     function apiUrl(action, params={}){
       const url=new URL(supabaseFunctionApi?apiBase:`${apiBase}/${action}`,location.href);
@@ -596,12 +597,12 @@
         const materials=arches.map(arch=>`<details class="manager-arch" open><summary>${arch} · ${archNames[arch]}</summary>${aiMaterial(c,arch)}</details>`).join('');
         return `<article class="manager-case"><div class="manager-case-head"><div><div class="manager-case-code">CASE 0${index+1} · ${c.kind==='E'?'环境预见':c.kind==='S'?'战略推演':'资源准备'}</div><h3>${c.id}｜${c.domain}｜${c.title}</h3></div><span class="tag dark">共同案例信息</span></div><div class="manager-case-body"><p><strong>情景：</strong>${c.context}</p><p><strong>经营背景：</strong>${detail(c,'background')}</p><p><strong>涉及的人和要考虑的条件：</strong>${detail(c,'stakeholders')} ${detail(c,'constraints')}</p><p><strong>做决定时看什么：</strong>${detail(c,'decision')}</p><p><strong>这道题要回答：</strong>${c.goal}</p><p><strong>已知信息：</strong></p><ul class="manager-facts">${c.facts.map(x=>`<li>${x}</li>`).join('')}</ul><p><strong>判断选项：</strong></p><div class="manager-options">${options}</div><h4>四种 AI 架构的分析</h4><div class="manager-arch-grid">${materials}</div></div></article>`;
       }).join('');
-      const apiInput=document.getElementById('managerApiInput'); if(apiInput&&apiBase) apiInput.value=apiBase;
+      const apiInput=document.getElementById('managerApiInput'); if(apiInput) apiInput.value=apiBase||defaultResearch3Api;
       document.getElementById('managerStatsBtn')?.addEventListener('click',loadManagerStats);
     }
     function managerText(value){return String(value??'').replace(/[&<>"']/g,(x)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));}
     function managerStatsEndpoint(){
-      const input=document.getElementById('managerApiInput')?.value.trim()||apiBase;
+      const input=document.getElementById('managerApiInput')?.value.trim()||apiBase||defaultResearch3Api;
       if(!input) return null;
       const url=new URL(input,location.href);
       url.searchParams.set('action','stats');
